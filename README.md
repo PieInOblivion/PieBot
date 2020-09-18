@@ -7,6 +7,7 @@ Until then consider this still in development
 
 
 ## Features
+- Multi-server compatibility!
 - A commands list (help)
 - A unique queue system in which individual song requests take priority above full playlists and albums
 - Youtube text searching, urls and playlist urls
@@ -97,8 +98,9 @@ pick *minimum* *maximum*
 
 ## Usage
 1. Rename 'secret_example' to 'secret'
-2. Fill each file with the relevant information. 'rps.json' is the Rock Paper Scissors scoreboard, global for all servers the bot is in. 'channels.json' is the id of each text channel you want to bot to read. Works with multiple text channels in multiple servers
+2. Fill each file with the relevant information. 'rps.json' is the Rock Paper Scissors scoreboard, global for all servers the bot is in. 'channels.json' is the id of each text channel you want to bot to read. Add as many text channels from different servers as you want. Multiple text channels for one server might lead to unexpected music queue behaviour.
 3. Invite the bot to your server by following DiscordJS' [guide](https://discordjs.guide/preparations/adding-your-bot-to-servers.html#bot-invite-links)
+4. Run the following:
 ```
 node --experimental-json-modules bot.js
 ```

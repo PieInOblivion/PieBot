@@ -86,14 +86,19 @@ pick *minimum* *maximum*
 ```
 
 
-## Planned Features
+## Planned Features (No particular order, suggestions welcome)
+- Osu! map recommender (Implementing a similar engine to [OsuHelper](https://github.com/Tyrrrz/OsuHelper))
 - League of Legends profile display
 - League of Legends champion build recommendation
-- League of Legends current match summarising/peaker
+- League of Legends current match summarising
+- Rainbow 6: Siege profile summariser
 - SoundCloud support?
 - Challenge other users to Rock Paper Scissors
 - Challenge other users to Tic-tac-toe (Noughts & Crosses)
 - Optional prefix support
+- Song discovery engine with your favourite YouTube or Spotify playlist as input
+- Language translation (Automatic translation of text channels outside of the dedicated bot chat)
+- Emoji reaction based voting system
 
 
 ## Usage

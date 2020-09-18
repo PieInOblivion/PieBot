@@ -11,24 +11,28 @@ export async function exec(serverProperties) {
 
 	switch(true) {
 		case isYoutubeLink(serverProperties.lastMessage.content):
-			const result = await youtubeLinkToArray(serverProperties.lastMessage.content);
-			conLog(result);
-			// shuffle then add to server playlistqueue
+			const youtubeResult = await youtubeLinkToArray(serverProperties.lastMessage.content);
+			if (youtubeResult.length == 1) {
+				serverProperties.userQueue.push(youtubeResult);
+			} else {
+				serverProperties.playlistQueue.concat(shuffle(youtubeResult));
+			}
+			
 			break;
 
 		case isSpotifyURI(serverProperties.lastMessage.content):
-			const result = null;
-			conLog(result);
-			// shuffle then add to server playlistqueue
+			const spotifyResult = await spotifyURItoArray(serverProperties.lastMessage.content);
+			spotifyResult.forEach(item => {
+				item = `%search%${item}`;
+			});
+			serverProperties.playlistQueue.concat(shuffle(youtubeResult));
 			break;
 
 		default:
-			const result = await youtubeSearchtoID(serverProperties.lastMessage.content);
-			conLog(result);
-			// push to userqueue
+			const searchResult = await youtubeSearchtoID(serverProperties.lastMessage.content);
+			serverProperties.userQueue.push(searchResult);
 	}
 	
-
 }
 
 function isYoutubeLink(link) {

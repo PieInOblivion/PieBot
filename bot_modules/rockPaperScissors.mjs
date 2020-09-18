@@ -4,7 +4,7 @@ import { MessageEmbed } from 'discord.js';
 
 export const call = ['rock', 'paper', 'scissors'];
 
-import scores from '../data/rps.json';
+import scores from '../secret/rps.json';
 
 function updateSave(obj) {
 	writeFile('./data/rps.json', JSON.stringify(obj), function writeJSON(err) {

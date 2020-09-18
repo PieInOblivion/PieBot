@@ -6,7 +6,11 @@ const spotify = new SpotifyWebApi({
   clientSecret: keysJSON.spotifySecret
 });
 
+const limit = 100;
+
 export async function spotifyURItoArray(search) {
+	await getAccessToken();
+
 	const id = extractID(search);
 
 	if (isSpotifyPlaylist(search)) return playlistIDtoArr(id);
@@ -33,19 +37,39 @@ function extractID(link) {
 }
 
 async function playlistIDtoArr(id) {
-	spotifyApi.getPlaylist(id)
-	.then(function(data) {
-		console.log('Some information about this playlist', data.body);
-	}, function(err) {
-		console.log('Something went wrong!', err);
-	});
+	const total = (await spotify.getPlaylistTracks(id, { fields: 'total' })).body.total;
+
+	const turns = Math.ceil(total / limit);
+	const ret = [];
+
+	for (let i = 0; i < turns; i++) {
+		const group = await spotify.getPlaylistTracks(id, { offset: limit*i, fields: 'items' });
+		group.body.items.forEach(item => {
+			ret.push(`${item.track.artists.map(artist => artist.name).join(` `)} - ${item.track.name}`);
+		});
+	}
+	
+	return ret;
 }
 
 async function albumIDtoArr(id) {
-	spotifyApi.getAlbumTracks(id, { limit : 5, offset : 1 })
-		.then(function(data) {
-			console.log(data.body);
-		}, function(err) {
-			console.log('Something went wrong!', err);
+	const total = (await spotify.getAlbumTracks(id, { fields: 'total' })).body.total;
+
+	const turns = Math.ceil(total / limit);
+	const ret = [];
+
+	for (let i = 0; i < turns; i++) {
+		const group = await spotify.getAlbumTracks(id, { offset: limit*i, fields: 'items' });
+		group.body.items.forEach(item => {
+			ret.push(`${item.artists.map(artist => artist.name).join(` `)} - ${item.name}`);
 		});
+	}
+	
+	return ret;
+}
+
+async function getAccessToken() {
+	await spotify.clientCredentialsGrant().then(data => {
+		spotify.setAccessToken(data.body['access_token']);
+	});
 }

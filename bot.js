@@ -53,6 +53,10 @@ channelsJSON.forEach(channelID => {
 	serverProperties[channelID] = {
 		userQueue: [],
 		playlistQueue: [],
+		playing: {
+			youtubeID: null,
+			title: null
+		},
 		isPlaying: false,
 		playingVoiceChannel: null,
 		dispatcher: null,

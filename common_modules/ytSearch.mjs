@@ -8,7 +8,7 @@ export async function youtubeLinkToArray(search) {
 	
 	if (isYTUrlShort(search)) return extractShortVideoID(search);
 
-	if (isYTUrlList(search)) return playlistIDToArray(playlistIDtoURL(extractPlaylistID(search)));
+	if (isYTUrlList(search)) return playlistURLToArray(playlistIDtoURL(extractPlaylistID(search)));
 }
 
 export async function youtubeIDtoTitle(id) {
@@ -19,8 +19,8 @@ export async function youtubeSearchtoID(search) {
 	return youtube.searchVideos(search, 1)[0].id;
 }
 
-async function playlistIDToArray(id) {
-	const playlist = await youtube.getPlaylist(id);
+async function playlistURLToArray(url) {
+	const playlist = await youtube.getPlaylist(url);
 	const videos = await playlist.getVideos();
 	const res = [];
 	videos.forEach(item => {

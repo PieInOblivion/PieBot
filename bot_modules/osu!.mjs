@@ -10,9 +10,13 @@ const osuApi = new osu.Api(keysJSON.osu, {
 export const call = ['osu '];
 
 export function exec(serverProperties) {
+
 	const searchQuery = serverProperties.lastMessage.content.replace('osu ', '');
+
 		osuApi.getUser({ u: searchQuery }).then(user => {
+
 			if (user.length !== 0) {
+				
 				serverProperties.lastMessage.channel.send(new MessageEmbed()
 					.setTitle(user.name)
 					.setColor(0xa4136a)
@@ -26,11 +30,16 @@ export function exec(serverProperties) {
 					.addField('PP', Math.round(user.pp.raw), true)
 					.setThumbnail(`https://a.ppy.sh/${user.id}`)
 				);
+
 			} else {
+
 				serverProperties.lastMessage.channel.send(new MessageEmbed()
 					.setColor(0xff9900)
 					.setTitle(`Player search got no results`)
 				);
+
 			}
+
 		});
+
 }

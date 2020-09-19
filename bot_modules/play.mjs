@@ -10,17 +10,21 @@ export const call = ['play '];
 export async function exec(serverProperties) {
 
 	if (!userInVoiceChannel(serverProperties)) {
+
 		serverProperties.lastMessage.channel.send(new MessageEmbed()
 			.setColor(0xff9900)
 			.addField("I can't see you", 'Please be in a voice channel first!')
 		);
+
 		return;
+
 	}
 
 	const preUserQueue = serverProperties.userQueue.length;
 	const prePlaylistQueue = serverProperties.playlistQueue.length;
 
 	switch (true) {
+
 		case isYoutubeLink(serverProperties.lastMessage.content):
 			const youtubeResult = await youtubeLinkToArray(serverProperties.lastMessage.content);
 			if (youtubeResult.length == 1) {
@@ -43,6 +47,7 @@ export async function exec(serverProperties) {
 			const searchResult = await youtubeSearchtoID(serverProperties.lastMessage.content);
 			serverProperties.userQueue.push(searchResult);
 			userSearchQueueMessage(serverProperties);
+			
 	}
 
 	audioEvent(serverProperties);

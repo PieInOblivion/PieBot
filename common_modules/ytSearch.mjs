@@ -4,11 +4,13 @@ import keysJSON from '../secret/keys.json';
 const youtube = new YouTubeApi(keysJSON.youtube);
 
 export async function youtubeLinkToArray(search) {
+
 	if (isYTUrl(search)) return extractVideoID(search);
 	
 	if (isYTUrlShort(search)) return extractShortVideoID(search);
 
 	if (isYTUrlList(search)) return playlistURLToArray(playlistIDtoURL(extractPlaylistID(search)));
+	
 }
 
 export async function youtubeIDtoTitle(id) {

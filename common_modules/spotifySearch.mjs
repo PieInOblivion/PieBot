@@ -8,6 +8,7 @@ const spotify = new SpotifyWebApi({
 });
 
 export async function spotifyURItoArray(search) {
+	
 	await getAccessToken();
 
 	const id = extractID(search);
@@ -15,6 +16,7 @@ export async function spotifyURItoArray(search) {
 	if (isSpotifyPlaylist(search)) return await playlistIDtoArr(id);
 
 	if (isSpotifyAlbum(search)) return await albumIDtoArr(id);
+
 }
 
 export function addSearchKey(array) {

@@ -24,4 +24,5 @@ export function exec(serverProperties) {
 		.addField('max', max, true)
 		.setColor(0x00ffff)
 	);
+	
 }

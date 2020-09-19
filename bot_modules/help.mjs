@@ -1,6 +1,7 @@
 export const call = ['help'];
 
 export function exec(serverProperties) {
+
 	serverProperties.lastMessage.author.send([
 		"```",
 		"Hello User,",
@@ -25,4 +26,5 @@ export function exec(serverProperties) {
 		"pick *minimum* *maximum*",
 		"```"
 	].join("\n"));
+	
 } 

@@ -8,7 +8,7 @@ export function exec(serverProperties) {
 
 		serverProperties.lastMessage.channel.send(new MessageEmbed()
 			.setTitle(`Queue Stats`)
-			.setAuthor(`Playing: **https://www.youtube.com/watch?v=${serverProperties.userQueue[0]}**`)
+			.setAuthor(`Playing: https://www.youtube.com/watch?v=${serverProperties.userQueue[0]}`)
 			.addField(`User Queue:`, serverProperties.userQueue.length, true)
 			.addField(`Playlist Queue:`, serverProperties.playlistQueue.length, true)
 			.setColor(0x00ffff)

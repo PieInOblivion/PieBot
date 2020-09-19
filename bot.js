@@ -1,13 +1,3 @@
-/*
-TODO
-	- Voice
-		- play
-		- pause
-		- queue
-		- skip
-		- stop
-*/
-
 import { readdirSync } from 'fs';
 
 // Discrete Bot Modules

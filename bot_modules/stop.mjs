@@ -1,13 +1,35 @@
-
 export const call = ['stop'];
 
 export async function exec(serverProperties) {
 
-	if (serverProperties.voiceChannel) {
-		await serverProperties.voiceChannel.disconnect();
+	try {
+
+		if (serverProperties.dispatcher) {
+
+			await serverProperties.dispatcher.end();
+
+			if (serverProperties.voiceChannel) {
+
+				await serverProperties.voiceChannel.disconnect();
+
+				resetProperties(serverProperties);
+
+			} else {
+
+				resetProperties(serverProperties);
+
+			}
+
+		} else {
+
+			resetProperties(serverProperties);
+			
+		}
+
+	} catch(err) {
+
 		resetProperties(serverProperties);
-	} else {
-		resetProperties(serverProperties);
+		
 	}
 
 }

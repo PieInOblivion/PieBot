@@ -8,8 +8,8 @@ Until then consider this still in development
 
 ## Features
 - Multi-server compatibility!
+- A unique queue system in which individual song requests take priority above playlists and albums
 - A commands list (help)
-- A unique queue system in which individual song requests take priority above full playlists and albums
 - Youtube text searching, urls and playlist urls
 - Spotify albums and user playlists
 - Now playing

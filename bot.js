@@ -2,7 +2,6 @@ import { readdirSync } from 'fs';
 
 // Discrete Bot Modules
 import { Client, MessageEmbed } from 'discord.js';
-
 import { conLog } from './common_modules/conLog.mjs';
 
 // Bot Info

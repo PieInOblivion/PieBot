@@ -53,12 +53,8 @@ channelsJSON.forEach(channelID => {
 	serverProperties[channelID] = {
 		userQueue: [],
 		playlistQueue: [],
-		playing: {
-			youtubeID: null,
-			title: null
-		},
-		isPlaying: false,
-		playingVoiceChannel: null,
+		playing: null,
+		voiceChannel: null,
 		dispatcher: null,
 		lastMessage: null
 	}
@@ -74,7 +70,7 @@ client.on('message', async (msg) => {
 		}
 	} catch (err) {
 		conLog(`Message error: ${conLog(err)}`, 'HELP');
-		serverProperties.lastMessage.channel.send(new MessageEmbed()	
+		serverProperties[msg.channel.id].lastMessage.channel.send(new MessageEmbed()	
 		.setTitle('Whoops!')
 		.setAuthor(`That last command didn't work`)
 		.setColor(0xff0000)

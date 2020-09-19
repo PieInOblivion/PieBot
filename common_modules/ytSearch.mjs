@@ -12,11 +12,11 @@ export async function youtubeLinkToArray(search) {
 }
 
 export async function youtubeIDtoTitle(id) {
-	return youtube.getVideo(videoIDtoURL(id)).title;
+	return (await youtube.getVideo(videoIDtoURL(id))).title;
 }
 
 export async function youtubeSearchtoID(search) {
-	return youtube.searchVideos(search, 1)[0].id;
+	return (await youtube.searchVideos(search, 1))[0].id;
 }
 
 async function playlistURLToArray(url) {

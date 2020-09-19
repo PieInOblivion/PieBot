@@ -1,3 +1,5 @@
+import { MessageEmbed } from 'discord.js';
+
 export const call = ['resume'];
 
 export function exec(serverProperties) {

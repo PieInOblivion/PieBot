@@ -1,3 +1,5 @@
+import { MessageEmbed } from 'discord.js';
+
 export const call = ['remove'];
 
 export function exec(serverProperties) {

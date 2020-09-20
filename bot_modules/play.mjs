@@ -82,7 +82,7 @@ async function userSearchQueueMessage(serverProperties) {
 		serverProperties.lastMessage.channel.send(new MessageEmbed()
 			.setColor(0x00ffff)
 			.setTitle('Now Playing: ')
-			.addField(title, `**https://www.youtube.com/watch?v=${serverProperties.userQueue[0]}**`)
+			.addField(title, `**https://www.youtube.com/watch?v=${serverProperties.playing}**`)
 		);
 
 	} else {

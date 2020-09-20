@@ -4,13 +4,11 @@ import keysJSON from '../secret/keys.json';
 const youtube = new YouTubeApi(keysJSON.youtube);
 
 export async function youtubeLinkToArray(search) {
-
 	if (isYTUrl(search)) return extractVideoID(search);
-	
+
 	if (isYTUrlShort(search)) return extractShortVideoID(search);
 
 	if (isYTUrlList(search)) return playlistURLToArray(playlistIDtoURL(extractPlaylistID(search)));
-	
 }
 
 export async function youtubeIDtoTitle(id) {
@@ -23,39 +21,51 @@ export async function youtubeSearchtoID(search) {
 
 async function playlistURLToArray(url) {
 	const playlist = await youtube.getPlaylist(url);
+
 	const videos = await playlist.getVideos();
+
 	const res = [];
-	videos.forEach(item => {
+
+	videos.forEach((item) => {
 		res.push(item.id);
 	});
+
 	return res;
 }
 
 function isYTUrl(testing) {
 	// https://www.youtube.com/watch?v=dQw4w9WgXcQ
 	const one = testing.includes('youtube.com');
+
 	const two = testing.includes('v=');
+
 	const three = !testing.includes('list=');
-	return (one && two && three);
+
+	return one && two && three;
 }
 
 function isYTUrlShort(testing) {
 	// https://youtu.be/dQw4w9WgXcQ
 	const one = testing.includes('youtu.be');
+
 	const two = testing.split('/').pop().length == 11;
-	return (one && two);
+
+	return one && two;
 }
 
 function isYTUrlList(testing) {
 	// https://www.youtube.com/watch?v=VDZEpxheh6E&list=PLBDi8oLoUF39lhHt_81JVuTQZxglGKyIX
 	// https://www.youtube.com/watch?list=PLBDi8oLoUF39lhHt_81JVuTQZxglGKyIX&v=VDZEpxheh6E
 	const one = testing.includes('youtube.com');
+
 	const two = testing.includes('list=');
-	return (one && two);
+
+	return one && two;
 }
 
 function extractVideoID(link) {
 	const startPos = link.indexOf('v=');
+
 	return [link.slice(startPos + 2, startPos + 13)];
 }
 
@@ -65,6 +75,7 @@ function extractShortVideoID(link) {
 
 function extractPlaylistID(link) {
 	const startPos = link.indexOf('list=');
+
 	return link.slice(startPos + 5, startPos + 39);
 }
 

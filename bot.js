@@ -2,7 +2,7 @@ import { readdirSync } from 'fs';
 
 // Discrete Bot Modules
 import { Client, MessageEmbed } from 'discord.js';
-import { conLog } from './common_modules/conLog.mjs';
+import { log } from './common_modules/log.mjs';
 import { stopBot } from './bot_modules/stop.mjs';
 
 // Bot Info
@@ -17,9 +17,9 @@ readdirSync('./bot_modules').forEach(moduleName => {
 			exec: exec,
 			call: call
 		};
-		conLog(`Loaded ${moduleName}`);
+		log(`Loaded ${moduleName}`);
 	}).catch(err => {
-		conLog(`${moduleName}: Error:`,'HELP', err);
+		log(`${moduleName}: Error:`,'HELP', err);
 	});
 });
 
@@ -38,16 +38,16 @@ channelsJSON.forEach(channelID => {
 });
 
 client.on('ready', () => {
-	conLog(`Logged in as ${client.user.tag}!`);
+	log(`Logged in as ${client.user.tag}!`);
 	client.user.setPresence({ activity: { name: 'with the dark arts' }, status: 'online' });
 });
 
 client.on('error', (err) => {
-	conLog(`Client Error:`, 'HELP', err);
+	log(`Client Error:`, 'HELP', err);
 });
 
 client.on('reconnecting', () => {
-	conLog(`Connecting...`);
+	log(`Connecting...`);
 });
 
 client.on('voiceStateUpdate', async () => {
@@ -65,12 +65,12 @@ client.on('message', async (msg) => {
 	try {
 		// Filter messages to certain voice channels and NOT from itself
 		if (serverPropertiesTable.hasOwnProperty(msg.channel.id) && !msg.author.bot) {
-			conLog(msg.content, 'CMSG');
+			log(msg.content, 'CMSG');
 			serverPropertiesTable[msg.channel.id].lastMessage = msg;
 			parseRequest(serverPropertiesTable[msg.channel.id]);
 		}
 	} catch (err) {
-		conLog(`Message error:`, 'HELP', err);
+		log(`Message error:`, 'HELP', err);
 		serverPropertiesTable[msg.channel.id].lastMessage.channel.send(new MessageEmbed()	
 			.setTitle('Whoops!')
 			.setAuthor(`That last command didn't work`)
@@ -89,5 +89,5 @@ function parseRequest(serverProperties){
 }
 
 client.login(keysJSON.discord).catch(err => {
-	conLog(`Login error:`, 'HELP', err)
+	log(`Login error:`, 'HELP', err)
 });

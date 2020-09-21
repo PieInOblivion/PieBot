@@ -1,5 +1,5 @@
 # PieBot
-PieInOblivion's Discord bot based on nodejs
+PieInOblivion's Discord bot based on DiscordJS (nodejs)
 
 Listed features and commands will be implemented and working on v1
 

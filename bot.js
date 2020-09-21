@@ -19,7 +19,7 @@ readdirSync('./bot_modules').forEach(moduleName => {
 		};
 		log(`Loaded ${moduleName}`);
 	}).catch(err => {
-		log(`${moduleName}: Error:`,'HELP', err);
+		log(`${moduleName}: Error:`, err);
 	});
 });
 
@@ -43,7 +43,7 @@ client.on('ready', () => {
 });
 
 client.on('error', (err) => {
-	log(`Client Error:`, 'HELP', err);
+	log(`Client Error:`, err);
 });
 
 client.on('reconnecting', () => {
@@ -65,12 +65,12 @@ client.on('message', async (msg) => {
 	try {
 		// Filter messages to certain voice channels and NOT from itself
 		if (serverPropertiesTable.hasOwnProperty(msg.channel.id) && !msg.author.bot) {
-			log(msg.content, 'CMSG');
+			log(`Channel Message:`, msg.content);
 			serverPropertiesTable[msg.channel.id].lastMessage = msg;
 			parseRequest(serverPropertiesTable[msg.channel.id]);
 		}
 	} catch (err) {
-		log(`Message error:`, 'HELP', err);
+		log(`Message error:`, err);
 		serverPropertiesTable[msg.channel.id].lastMessage.channel.send(new MessageEmbed()	
 			.setTitle('Whoops!')
 			.setAuthor(`That last command didn't work`)
@@ -89,5 +89,5 @@ function parseRequest(serverProperties){
 }
 
 client.login(keysJSON.discord).catch(err => {
-	log(`Login error:`, 'HELP', err)
+	log(`Login error:`, err)
 });

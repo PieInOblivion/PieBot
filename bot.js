@@ -3,6 +3,7 @@ import { readdirSync } from 'fs';
 // Discrete Bot Modules
 import { Client, MessageEmbed } from 'discord.js';
 import { conLog } from './common_modules/conLog.mjs';
+import { stopBot } from './bot_modules/stop.mjs';
 
 // Bot Info
 import channelsJSON from './secret/channels.json';
@@ -18,28 +19,15 @@ readdirSync('./bot_modules').forEach(moduleName => {
 		};
 		conLog(`Loaded ${moduleName}`);
 	}).catch(err => {
-		conLog(`${moduleName}: Error: ${err}`,'HELP');
+		conLog(`${moduleName}: Error:`,'HELP', err);
 	});
 });
 
 const client = new Client();
-const serverProperties = {};
-
-client.on('ready', () => {
-	conLog(`Logged in as ${client.user.tag}!`);
-	client.user.setPresence({ activity: { name: 'with the dark arts' }, status: 'online' });
-});
-
-client.on('error', (err) => {
-	conLog(`Client Error: ${Object.values(err)}`, 'HELP');
-});
-
-client.on('reconnecting', () => {
-	conLog(`Connecting...`);
-});
+const serverPropertiesTable = {};
 
 channelsJSON.forEach(channelID => {
-	serverProperties[channelID] = {
+	serverPropertiesTable[channelID] = {
 		userQueue: [],
 		playlistQueue: [],
 		playing: null,
@@ -49,21 +37,45 @@ channelsJSON.forEach(channelID => {
 	}
 });
 
+client.on('ready', () => {
+	conLog(`Logged in as ${client.user.tag}!`);
+	client.user.setPresence({ activity: { name: 'with the dark arts' }, status: 'online' });
+});
+
+client.on('error', (err) => {
+	conLog(`Client Error:`, 'HELP', err);
+});
+
+client.on('reconnecting', () => {
+	conLog(`Connecting...`);
+});
+
+client.on('voiceStateUpdate', async () => {
+	// This will not scale well and could be improved in the future
+	// Such as, get server ID which the channel update occured in and check only that voice channel
+	Object.keys(serverPropertiesTable).forEach(botTextChannelID => {
+		const serverProperties = serverPropertiesTable[botTextChannelID];
+		if (serverProperties.voiceChannel != null && serverProperties.voiceChannel.channel.members.size == 1) {
+			stopBot(serverProperties);
+		}
+	});
+});
+
 client.on('message', async (msg) => {
 	try {
 		// Filter messages to certain voice channels and NOT from itself
-		if (serverProperties.hasOwnProperty(msg.channel.id) && !msg.author.bot) {
+		if (serverPropertiesTable.hasOwnProperty(msg.channel.id) && !msg.author.bot) {
 			conLog(msg.content, 'CMSG');
-			serverProperties[msg.channel.id].lastMessage = msg;
-			parseRequest(serverProperties[msg.channel.id]);
+			serverPropertiesTable[msg.channel.id].lastMessage = msg;
+			parseRequest(serverPropertiesTable[msg.channel.id]);
 		}
 	} catch (err) {
-		conLog(`Message error: ${conLog(err)}`, 'HELP');
-		serverProperties[msg.channel.id].lastMessage.channel.send(new MessageEmbed()	
-		.setTitle('Whoops!')
-		.setAuthor(`That last command didn't work`)
-		.setColor(0xff0000)
-	);
+		conLog(`Message error:`, 'HELP', err);
+		serverPropertiesTable[msg.channel.id].lastMessage.channel.send(new MessageEmbed()	
+			.setTitle('Whoops!')
+			.setAuthor(`That last command didn't work`)
+			.setColor(0xff0000)
+		);
 	}
 });
 
@@ -76,4 +88,6 @@ function parseRequest(serverProperties){
 	});
 }
 
-client.login(keysJSON.discord).catch(err => {conLog(`Login error: ${err}`, 'ERROR')});
+client.login(keysJSON.discord).catch(err => {
+	conLog(`Login error:`, 'HELP', err)
+});

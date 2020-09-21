@@ -9,6 +9,7 @@ Until then consider this still in development
 ## Features
 - Multi-server compatibility!
 - A unique queue system in which individual song requests take priority above playlists and albums
+- Automatically leaves the voice channel when it's alone (Has the side effect of being able to stop it by moving it into an empty voice channel)
 - A commands list (help)
 - Youtube text searching, urls and playlist urls
 - Spotify albums and user playlists

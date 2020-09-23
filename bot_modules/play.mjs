@@ -16,9 +16,6 @@ export async function exec(serverProperties) {
 		return;
 	}
 
-	const preUserQueue = serverProperties.userQueue.length;
-	const prePlaylistQueue = serverProperties.playlistQueue.length;
-
 	switch (true) {
 		case isYoutubeLink(serverProperties.lastMessage.content):
 			const youtubeResult = await youtubeLinkToArray(serverProperties.lastMessage.content);
@@ -27,7 +24,7 @@ export async function exec(serverProperties) {
 				userSearchQueueMessage(serverProperties);
 			} else {
 				serverProperties.playlistQueue.push(...shuffle(youtubeResult));
-				playlistQueueMessage(serverProperties, preUserQueue, prePlaylistQueue);
+				playlistQueueMessage(serverProperties, youtubeResult.length);
 			}
 			break;
 
@@ -35,7 +32,7 @@ export async function exec(serverProperties) {
 			const spotifyResult = await spotifyURItoArray(serverProperties.lastMessage.content);
 			const searchKeyArray = addSearchKey(spotifyResult);
 			serverProperties.playlistQueue.push(...shuffle(searchKeyArray));
-			playlistQueueMessage(serverProperties, preUserQueue, prePlaylistQueue);
+			playlistQueueMessage(serverProperties, spotifyResult.length);
 			break;
 
 		default:
@@ -55,20 +52,12 @@ function isSpotifyURI(link) {
 	return link.includes('spotify:');
 }
 
-async function playlistQueueMessage(serverProperties, preUserQueue, prePlaylistQueue) {
+async function playlistQueueMessage(serverProperties, addedSongsLength) {
 	serverProperties.lastMessage.channel.send(
 		new MessageEmbed()
 			.setTitle(`Queue Stats`)
-			.addField(
-				`User Queue: ${serverProperties.userQueue.length}`,
-				`${serverProperties.userQueue.length - preUserQueue} Added`,
-				true
-			)
-			.addField(
-				`Playlist Queue: ${serverProperties.playlistQueue.length}`,
-				`${serverProperties.playlistQueue.length - prePlaylistQueue} Added`,
-				true
-			)
+			.addField(`User Queue: ${serverProperties.userQueue.length}`, `0 Added`, true)
+			.addField(`Playlist Queue: ${serverProperties.playlistQueue.length}`, `${addedSongsLength} Added`, true)
 			.setColor(0x00ffff)
 	);
 }

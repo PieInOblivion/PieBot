@@ -10,7 +10,7 @@ export async function playAudio(serverProperties) {
 		serverProperties.voiceChannel = await serverProperties.lastMessage.member.voice.channel.join();
 	}
 
-	serverProperties.dispatcher = serverProperties.voiceChannel.play(await stream, { type: 'opus' });
+	serverProperties.dispatcher = serverProperties.voiceChannel.play(await stream, { type: 'opus', fec: true});
 
 	serverProperties.dispatcher.on('finish', async () => {
 		if (await loadNextSong(serverProperties)) {

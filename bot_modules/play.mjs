@@ -12,7 +12,6 @@ export async function exec(serverProperties) {
 		serverProperties.lastMessage.channel.send(
 			new MessageEmbed().setColor(0xff9900).addField("I can't see you", 'Please be in a voice channel first!')
 		);
-
 		return;
 	}
 
@@ -21,7 +20,7 @@ export async function exec(serverProperties) {
 			const youtubeResult = await youtubeLinkToArray(serverProperties.lastMessage.content);
 			if (youtubeResult.length == 1) {
 				serverProperties.userQueue.push(youtubeResult[0]);
-				userSearchQueueMessage(serverProperties);
+				userQueueMessage(serverProperties, youtubeResult[0]);
 			} else {
 				serverProperties.playlistQueue.push(...shuffle(youtubeResult));
 				playlistQueueMessage(serverProperties, youtubeResult.length);
@@ -38,7 +37,7 @@ export async function exec(serverProperties) {
 		default:
 			const searchResult = await youtubeSearchtoID(serverProperties.lastMessage.content);
 			serverProperties.userQueue.push(searchResult);
-			userSearchQueueMessage(serverProperties);
+			userQueueMessage(serverProperties, searchResult);
 	}
 
 	audioEvent(serverProperties);
@@ -52,33 +51,34 @@ function isSpotifyURI(link) {
 	return link.includes('spotify:');
 }
 
-async function playlistQueueMessage(serverProperties, addedSongsLength) {
+async function playlistQueueMessage(serverProperties, addedPlaylistSongsLength) {
 	serverProperties.lastMessage.channel.send(
 		new MessageEmbed()
 			.setTitle(`Queue Stats`)
 			.addField(`User Queue: ${serverProperties.userQueue.length}`, `0 Added`, true)
-			.addField(`Playlist Queue: ${serverProperties.playlistQueue.length}`, `${addedSongsLength} Added`, true)
+			.addField(`Playlist Queue: ${serverProperties.playlistQueue.length}`, `${addedPlaylistSongsLength} Added`, true)
 			.setColor(0x00ffff)
 	);
 }
 
-async function userSearchQueueMessage(serverProperties) {
-	const title = await youtubeIDtoTitle(serverProperties.userQueue[0]);
+async function userQueueMessage(serverProperties, IDAdded) {
+	const title = await youtubeIDtoTitle(IDAdded);
 
 	if (!serverProperties.voiceChannel) {
 		serverProperties.lastMessage.channel.send(
 			new MessageEmbed()
 				.setColor(0x00ffff)
-				.setTitle('Now Playing: ')
-				.addField(title, `**https://www.youtube.com/watch?v=${serverProperties.playing}**`)
+				.setTitle('Now Playing:')
+				.addField(title, `**https://www.youtube.com/watch?v=${IDAdded}**`)
 		);
 	} else {
 		serverProperties.lastMessage.channel.send(
 			new MessageEmbed()
-				.setTitle(`Queue Stats`)
-				.addField(`User Queue: ${serverProperties.userQueue.length}`, `1 Added`, true)
-				.addField(`Playlist Queue: ${serverProperties.playlistQueue.length}`, `0 Added`, true)
 				.setColor(0x00ffff)
+				.setTitle('Added to queue:')
+				.addField(title, `**https://www.youtube.com/watch?v=${IDAdded}**`)
+				.addField(`User Queue Length:`, serverProperties.userQueue.length, true)
+				.addField(`Playlist Queue Length:`, serverProperties.playlistQueue.length, true)
 		);
 	}
 }

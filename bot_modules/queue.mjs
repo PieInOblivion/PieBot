@@ -7,8 +7,8 @@ export function exec(serverProperties) {
 		serverProperties.lastMessage.channel.send(
 			new MessageEmbed()
 				.setTitle(`Queue Stats`)
-				.addField(`User Queue:`, serverProperties.userQueue.length, true)
-				.addField(`Playlist Queue:`, serverProperties.playlistQueue.length, true)
+				.addField(`User Queue Length:`, serverProperties.userQueue.length, true)
+				.addField(`Playlist Queue Length:`, serverProperties.playlistQueue.length, true)
 				.setColor(0x00ffff)
 		);
 	} else {

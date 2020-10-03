@@ -1,10 +1,6 @@
 # PieBot
 PieInOblivion's Discord bot based on DiscordJS (nodejs)
 
-Listed features and commands will be implemented and working on v1
-
-Until then consider this still in development
-
 
 ## Features
 - Multi-server compatibility!
@@ -106,15 +102,20 @@ lolc *username*
 - SoundCloud support?
 - Challenge other users to Rock Paper Scissors
 - Challenge other users to Tic-tac-toe (Noughts & Crosses)
-- Optional prefix support
+- Optional command prefix support
 - Song discovery engine with your favourite YouTube or Spotify playlist as input
 - Language translation (Automatic translation of text channels outside of the dedicated bot chat)
 - Emoji reaction based voting system
 
 
 ## Usage
+<<<<<<< HEAD
 1. Rename 'secret_example' to 'secret'
 2. Fill each file with the relevant information. 'rps.json' is the Rock Paper Scissors scoreboard, global for all servers the bot is in. 'channels.json' is the id of each text channel you want to bot to read. Add as many text channels from different servers as you want. Multiple text channels for one server might lead to unexpected music queue behaviour. Change config lolRegion if needed, region ID's are in leagueCurrentGame.mjs
+=======
+1. Rename 'secret_example' folder to 'secret'
+2. Fill each file with the relevant information. 'rps.json' is the Rock Paper Scissors scoreboard, global for all servers. 'channels.json' is the id of each text channel you want to bot to read. Add as many text channels from different servers as you want. Multiple text channels for one server might lead to unexpected music queue behaviour. Fill 'keys.json' with keys.
+>>>>>>> 24239c05e1a724a740f7ccb40bd0e668a0545581
 3. Invite the bot to your server by following DiscordJS' [guide](https://discordjs.guide/preparations/adding-your-bot-to-servers.html#bot-invite-links)
 4. Run the following:
 ```

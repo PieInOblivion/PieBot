@@ -10,9 +10,9 @@ const osuApi = new osu.Api(keysJSON.osu, {
 export const call = ['osu '];
 
 export function exec(serverProperties) {
-	const searchQuery = serverProperties.lastMessage.content.replace('osu ', '');
+	const searchArg = serverProperties.lastMessage.content.slice(call[0].length);
 
-	osuApi.getUser({ u: searchQuery }).then((user) => {
+	osuApi.getUser({ u: searchArg }).then((user) => {
 		if (user.length !== 0) {
 			serverProperties.lastMessage.channel.send(
 				new MessageEmbed()

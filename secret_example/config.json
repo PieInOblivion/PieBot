@@ -1,4 +1,6 @@
 {
 	"spotifySearchKey": "%search%",
-	"spotifyApiLimit": 100
+	"spotifyApiLimit": 100,
+	"lolRegion": "OC1",
+	"opggRegion": "oce"
 }

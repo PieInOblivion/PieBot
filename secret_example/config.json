@@ -1,4 +1,5 @@
 {
+	"ownerId": "REPLACE",
 	"spotifySearchKey": "%search%",
 	"spotifyApiLimit": 100,
 	"lolRegion": "OC1",

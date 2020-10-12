@@ -24,7 +24,7 @@
     "node-osu": "^2.2.0",
     "request": "^2.88.2",
     "simple-youtube-api": "^5.2.1",
-    "spotify-web-api-node": "^4.0.0",
+    "spotify-web-api-node": "^5.0.0",
     "twisted": "^1.29.0",
     "utf-8-validate": "^5.0.2",
     "ytdl-core-discord": "^1.2.3",

@@ -1,7 +1,7 @@
 import cheerio from 'cheerio';
 import needle from 'needle';
 import twisted from 'twisted';
-import { getChampionName } from 'twisted/dist/constants/champions.js';
+import champs from 'twisted/dist/constants/champions.js';
 import { titleFormat } from './titleFormat.mjs'
 import keysJSON from '../secret/keys.json';
 import config from '../secret/config.json';
@@ -56,7 +56,7 @@ export async function liveGameById(id) {
 }
 
 export function champName(id) {
-	return titleFormat(getChampionName(id));
+	return titleFormat(champs.getChampionName(id));
 }
 
 export async function playerSummary(player) {

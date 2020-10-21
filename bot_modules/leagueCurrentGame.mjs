@@ -20,6 +20,8 @@ export async function exec(serverProperties) {
 		return;
 	}
 
+	serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xe19205).setTitle(`Game Found: Loading...`));
+
 	const liveGamePlayers = [];
 
 	for (let i = 0; i < liveGame.participants.length; i++) {
@@ -50,6 +52,7 @@ export async function exec(serverProperties) {
 			redReturnMessage.addField(returnPlayerTitle, returnPlayerInfo);
 		}
 	});
+	
 	serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xe19205).setTitle(`${entryUser.name}'s Live Game Players`));
 	serverProperties.lastMessage.channel.send(blueReturnMessage);
 	serverProperties.lastMessage.channel.send(redReturnMessage);

@@ -21,6 +21,7 @@ export function exec(serverProperties) {
 			'queue',
 			'remove',
 			'osu *username*',
+			'lolc *username*',
 			'pick',
 			'pick *maximum*',
 			'pick *minimum* *maximum*',

@@ -19,6 +19,10 @@ export async function youtubeSearchtoID(search) {
 	return (await youtube.searchVideos(search, 1))[0].id;
 }
 
+export function isYoutubeLink(link) {
+	return (isYTUrl(link) || isYTUrlShort(link) || isYTUrlList(link));
+}
+
 async function playlistURLToArray(url) {
 	const playlist = await youtube.getPlaylist(url);
 

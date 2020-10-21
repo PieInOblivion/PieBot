@@ -27,6 +27,10 @@ export function addSearchKey(array) {
 	return newArray;
 }
 
+export function isSpotifyURI(link) {
+	return (isSpotifyPlaylist(link) || isSpotifyAlbum(link));
+}
+
 function isSpotifyPlaylist(search) {
 	// spotify:playlist:1vTd1NZxTCIJ851CvRohv7
 	return search.includes('spotify:playlist:');

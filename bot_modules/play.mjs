@@ -1,6 +1,6 @@
 import { MessageEmbed } from 'discord.js';
-import { youtubeLinkToArray, youtubeSearchtoID, youtubeIDtoTitle } from '../common_modules/ytSearch.mjs';
-import { spotifyURItoArray, addSearchKey } from '../common_modules/spotifySearch.mjs';
+import { youtubeLinkToArray, youtubeSearchtoID, youtubeIDtoTitle, isYoutubeLink } from '../common_modules/ytSearch.mjs';
+import { spotifyURItoArray, addSearchKey, isSpotifyURI } from '../common_modules/spotifySearch.mjs';
 import { shuffle } from '../common_modules/arrayShuffle.mjs';
 import { audioEvent } from '../common_modules/audioEvent.mjs';
 import { userInVoiceChannel } from '../common_modules/userInVoiceChannel.mjs';
@@ -43,14 +43,6 @@ export async function exec(serverProperties) {
 	}
 
 	audioEvent(serverProperties);
-}
-
-function isYoutubeLink(link) {
-	return link.includes('youtu');
-}
-
-function isSpotifyURI(link) {
-	return link.includes('spotify:');
 }
 
 async function playlistQueueMessage(serverProperties, addedPlaylistSongsLength) {

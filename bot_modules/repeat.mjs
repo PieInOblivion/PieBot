@@ -3,6 +3,13 @@ import { MessageEmbed } from 'discord.js';
 export const call = ['repeat'];
 
 export function exec(serverProperties) {
+	if (!serverProperties.dispatcher) {
+		serverProperties.lastMessage.channel.send(
+			new MessageEmbed().setColor(0xff9900).addField('Nice.', `I'm not currently playing anything`)
+		);
+		return;
+	}
+
 	const command = serverProperties.lastMessage.content.split(' ');
 
 	if (command.length == 2) {

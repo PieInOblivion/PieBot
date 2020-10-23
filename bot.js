@@ -3,7 +3,7 @@ import { readdirSync } from 'fs';
 // Discrete Bot Modules
 import { Client, MessageEmbed } from 'discord.js';
 import { log } from './common_modules/log.mjs';
-import { stopBot } from './bot_modules/stop.mjs';
+import { resetProperties } from './common_modules/resetServerProperties.mjs';
 
 // Bot Info
 import channelsJSON from './secret/channels.json';
@@ -57,7 +57,7 @@ client.on('voiceStateUpdate', async () => {
 	Object.keys(serverPropertiesTable).forEach(botTextChannelID => {
 		const serverProperties = serverPropertiesTable[botTextChannelID];
 		if (serverProperties.voiceChannel != null && serverProperties.voiceChannel.channel.members.size == 1) {
-			stopBot(serverProperties);
+			resetProperties(serverProperties);
 		}
 	});
 });

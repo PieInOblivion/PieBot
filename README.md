@@ -13,6 +13,7 @@ PieInOblivion's Discord bot based on DiscordJS (nodejs)
 - Skipping
 - Pausing
 - Resuming
+- Repeat
 - Stopping (Resets music queues)
 - Removing songs from the queue
 - Osu! profile display
@@ -44,7 +45,7 @@ play *Text search, YouTube song url, YouTube playlist url, Spotify album URI, Sp
 ```
 np
 ```
-### Skip Current Song
+### Skip Current Song, and turns repeat off
 ```
 skip
 ```
@@ -55,6 +56,13 @@ pause
 ### Resume Current Song
 ```
 resume
+```
+### Repeat Current Song
+```
+repeat
+```
+```
+repeat *(true|t|yes|y|1) to enable, (false|f|no|n|0) to disable*
 ```
 ### Stop Current Playback and Reset Song Queues
 ```

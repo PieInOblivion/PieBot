@@ -31,6 +31,7 @@ channelsJSON.forEach(channelID => {
 		userQueue: [],
 		playlistQueue: [],
 		playing: null,
+		repeat: false,
 		voiceChannel: null,
 		dispatcher: null,
 		lastMessage: null

@@ -7,10 +7,9 @@ export function exec(serverProperties) {
 		serverProperties.dispatcher &&
 		(serverProperties.userQueue.length != 0 || serverProperties.playlistQueue.length != 0)
 	) {
-		// If audio glitched occur change to .pause(true)
 		serverProperties.dispatcher.end();
-
 		serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0x00ffff).setTitle('Skipped'));
+		serverProperties.repeat = false;
 	} else {
 		serverProperties.lastMessage.channel.send(
 			new MessageEmbed().setColor(0xff9900).addField('Nice.', 'Only one song in queue or not currently playing')

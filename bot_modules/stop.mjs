@@ -23,6 +23,8 @@ function resetProperties(serverProperties) {
 
 	serverProperties.playing = null;
 
+	serverProperties.repeat = false;
+
 	serverProperties.voiceChannel = null;
 
 	serverProperties.dispatcher = null;

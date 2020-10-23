@@ -2,6 +2,8 @@ import { youtubeSearchtoID } from './ytSearch.mjs';
 import config from '../secret/config.json';
 
 export async function loadNextSong(serverProperties) {
+	if (serverProperties.repeat) return true;
+
 	if (serverProperties.userQueue.length > 0) {
 		serverProperties.playing = serverProperties.userQueue[0];
 

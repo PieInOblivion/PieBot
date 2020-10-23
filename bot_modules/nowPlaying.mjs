@@ -12,6 +12,7 @@ export async function exec(serverProperties) {
 				.setColor(0x00ffff)
 				.setTitle('Now Playing: ')
 				.addField(title, `**https://www.youtube.com/watch?v=${serverProperties.playing}**`)
+				.addField(`Repeat:`, (serverProperties.repeat ? 'Yes' : 'No'), true)
 		);
 	} else {
 		serverProperties.lastMessage.channel.send(

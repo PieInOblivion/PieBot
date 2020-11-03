@@ -5,7 +5,7 @@ import { shuffle } from '../common_modules/arrayShuffle.mjs';
 import { audioEvent } from '../common_modules/audioEvent.mjs';
 import { userInVoiceChannel } from '../common_modules/userInVoiceChannel.mjs';
 
-export const call = ['play '];
+export const call = ['play ', 'p '];
 
 export async function exec(serverProperties) {
 	if (!userInVoiceChannel(serverProperties)) {

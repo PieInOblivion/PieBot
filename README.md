@@ -41,6 +41,9 @@ scissors
 ```
 play *Text search, YouTube song url, YouTube playlist url, Spotify album URI, Spotify playlist URI*
 ```
+```
+p *Text search, YouTube song url, YouTube playlist url, Spotify album URI, Spotify playlist URI*
+```
 ### Now Playing Title and URL
 ```
 np

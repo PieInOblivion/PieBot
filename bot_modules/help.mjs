@@ -13,6 +13,7 @@ export function exec(serverProperties) {
 			'paper',
 			'scissors',
 			'play *Text search, YouTube song url, YouTube playlist url, Spotify album URI, Spotify playlist URI*',
+			'p *Text search, YouTube song url, YouTube playlist url, Spotify album URI, Spotify playlist URI*',
 			'np',
 			'skip',
 			'pause',

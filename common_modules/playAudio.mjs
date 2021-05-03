@@ -4,14 +4,14 @@ import { resetProperties } from './resetServerProperties.mjs';
 import ytdl from 'ytdl-core-discord';
 
 export async function playAudio(serverProperties) {
-	// 8 MB buffer
 	const stream = ytdl(serverProperties.playing, { filter: 'audioonly', quality: 'highestaudio' });
 
 	if (!serverProperties.voiceChannel) {
 		serverProperties.voiceChannel = await serverProperties.lastMessage.member.voice.channel.join();
 	}
 
-	serverProperties.dispatcher = serverProperties.voiceChannel.play(await stream, { type: 'opus', fec: true, volume: false });
+	// 50 packets = 1 second
+	serverProperties.dispatcher = serverProperties.voiceChannel.play(await stream, { type: 'opus', fec: true, volume: false, highWaterMark: 50 });
 
 	serverProperties.dispatcher.on('finish', async () => {
 		if (await loadNextSong(serverProperties)) {

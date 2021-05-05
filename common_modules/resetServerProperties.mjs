@@ -1,6 +1,6 @@
 export async function resetProperties(serverProperties) {
 	if (serverProperties.dispatcher != null) {
-		await serverProperties.dispatcher.end();
+		await serverProperties.dispatcher.destroy();
 	}
 
 	if (serverProperties.voiceChannel != null) {

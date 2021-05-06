@@ -1,6 +1,6 @@
 {
   "name": "piebot",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "PieInOblivion's personal use Discord bot built with discord.js",
   "main": "bot.js",
   "author": "Lucas Hofmockel-Spanakis",

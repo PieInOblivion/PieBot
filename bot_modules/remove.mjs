@@ -13,6 +13,6 @@ export function exec(serverProperties) {
 	serverProperties.userQueue.pop();
 
 	serverProperties.lastMessage.channel.send(
-		new MessageEmbed().setColor(0x00ffff).setTitle('Remove last song added to user queue')
+		new MessageEmbed().setColor(0x00ffff).setTitle('Removed last song added to user queue')
 	);
 }

@@ -9,7 +9,7 @@ export async function getJSON(url) {
     
         res.on("end", () => {
             try {
-                return JSON.parse(body);
+                return await JSON.parse(body);
             } catch (error) {
                 console.error(error.message);
             };

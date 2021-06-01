@@ -1,7 +1,7 @@
 import cheerio from 'cheerio';
 import needle from 'needle';
 import twisted from 'twisted';
-const fetch = request('node-fetch');
+const fetch = require('node-fetch');
 import keysJSON from '../secret/keys.json';
 import config from '../secret/config.json';
 

@@ -1,7 +1,7 @@
 import cheerio from 'cheerio';
 import needle from 'needle';
 import twisted from 'twisted';
-const fetch = require('node-fetch');
+import { getJSON } from './https.mjs';
 import keysJSON from '../secret/keys.json';
 import config from '../secret/config.json';
 
@@ -55,10 +55,7 @@ export async function liveGameById(id) {
 }
 
 export async function champJSON() {
-	return await fetch(config.lolChampIDs, { method: "Get" }).then(res => res.json())
-    .then((json) => {
-		return json;
-    });
+	return await getJSON(config.lolChampIDs);
 }
 
 export function champJSONIdToName(json, id) {

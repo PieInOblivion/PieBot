@@ -1,10 +1,11 @@
 import { MessageEmbed } from 'discord.js';
 import { playerByName, liveGameById, playerSummary } from '../common_modules/lol.mjs';
+import { removePrefix } from '../common_modules/removePrefix.mjs';
 
 export const call = ['lolc '];
 
 export async function exec(serverProperties) {
-	const searchArg = serverProperties.lastMessage.content.slice(call[0].length);
+	const searchArg = removePrefix(serverProperties.lastMessage.content);
 
 	const entryUser = await playerByName(searchArg);
 
@@ -44,7 +45,7 @@ export async function exec(serverProperties) {
 			returnPlayerTopChamps.push((c == p.stats.currentChamp ? `**${c}**` : c));
 		})
 
-		let returnPlayerInfo = `${p.stats.ranked.r}\n${p.stats.ranked.w} Wins\n${p.stats.ranked.l} Losses\n${p.stats.ranked.wr} Win Ratio\nTop Champs: ${returnPlayerTopChamps.join(', ')}`;
+		let returnPlayerInfo = `${p.stats.ranked.r}\n${p.stats.ranked.w} W / ${p.stats.ranked.l} L / ${p.stats.ranked.wr} WR\nTop Champs: ${returnPlayerTopChamps.join(', ')}`;
 
 		if (p.stats.team == 'Blue') {
 			blueReturnMessage.addField(returnPlayerTitle, returnPlayerInfo);

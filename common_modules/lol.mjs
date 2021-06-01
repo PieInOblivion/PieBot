@@ -1,8 +1,7 @@
 import cheerio from 'cheerio';
 import needle from 'needle';
 import twisted from 'twisted';
-import champs from 'twisted/dist/constants/champions.js';
-import { titleFormat } from './titleFormat.mjs'
+import { fetch } from 'node-fetch';
 import keysJSON from '../secret/keys.json';
 import config from '../secret/config.json';
 
@@ -55,24 +54,35 @@ export async function liveGameById(id) {
 	return (game ? game.response : false);
 }
 
-export function champName(id) {
-	return titleFormat(champs.getChampionName(id));
+export async function champJSON() {
+	return await fetch(config.lolChampIDs, { method: "Get" }).then(res => res.json())
+    .then((json) => {
+		return json;
+    });
+}
+
+export function champJSONIdToName(json, id) {
+	json.forEach(champ => {
+		if (champ.id == id) {
+			return champ.name;
+		}
+	})
 }
 
 export async function playerSummary(player) {
-	const [ topChampions, rankedStats ] = await Promise.all([playerTopChamps(player.summonerId), playerRankedStats(player.summonerName)]);
+	const [ topChampions, rankedStats, champJSON] = await Promise.all([playerTopChamps(player.summonerId), playerRankedStats(player.summonerName), champJSON()]);
 
 	const topChamps = [];
 
 	topChampions.forEach(c => {
-		topChamps.push(champName(c.championId));
+		topChamps.push(champJSONIdToName(champJSON, c.championId));
 	});
 
 	return {
 		name: player.summonerName,
 		topThree: topChamps,
 		ranked: rankedStats,
-		currentChamp: champName(player.championId),
+		currentChamp: champJSONIdToName(champJSON, player.championId),
 		team: (player.teamId == 100 ? 'Blue' : 'Red')
 	}
 }

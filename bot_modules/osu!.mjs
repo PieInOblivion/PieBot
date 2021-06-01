@@ -1,5 +1,6 @@
 import { MessageEmbed } from 'discord.js';
 import osu from 'node-osu';
+import { removePrefix } from '../common_modules/removePrefix.mjs';
 import keysJSON from '../secret/keys.json';
 
 const osuApi = new osu.Api(keysJSON.osu, {
@@ -10,7 +11,7 @@ const osuApi = new osu.Api(keysJSON.osu, {
 export const call = ['osu '];
 
 export function exec(serverProperties) {
-	const searchArg = serverProperties.lastMessage.content.slice(call[0].length);
+	const searchArg = removePrefix(serverProperties.lastMessage.content);
 
 	osuApi.getUser({ u: searchArg }).then((user) => {
 		if (user.length !== 0) {

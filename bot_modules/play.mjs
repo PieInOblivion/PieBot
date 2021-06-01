@@ -4,8 +4,9 @@ import { spotifyURItoArray, addSearchKey, isSpotifyURI } from '../common_modules
 import { shuffle } from '../common_modules/arrayShuffle.mjs';
 import { audioEvent } from '../common_modules/audioEvent.mjs';
 import { userInVoiceChannel } from '../common_modules/userInVoiceChannel.mjs';
+import { removePrefix } from '../common_modules/removePrefix.mjs';
 
-export const call = ['play ', 'Play', 'p '];
+export const call = ['play ', 'Play ', 'p '];
 
 export async function exec(serverProperties) {
 	if (!userInVoiceChannel(serverProperties)) {
@@ -15,7 +16,7 @@ export async function exec(serverProperties) {
 		return;
 	}
 
-	const searchArg = serverProperties.lastMessage.content.match(/^(\S+)\s(.*)/).slice(1)[1];
+	const searchArg = removePrefix(serverProperties.lastMessage.content);
 
 	switch (true) {
 		case isYoutubeLink(searchArg):

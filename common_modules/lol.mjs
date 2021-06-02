@@ -1,7 +1,6 @@
 import cheerio from 'cheerio';
-import needle from 'needle';
 import twisted from 'twisted';
-import { getJSON } from './https.mjs';
+import { getJSON, getHTML } from './https.mjs';
 import keysJSON from '../secret/keys.json';
 import config from '../secret/config.json';
 
@@ -36,9 +35,7 @@ export async function playerLastMatches(id) {
 }
 
 export async function playerRankedStats(name) {
-	const response = await needle('get', encodeURI(`https://${config.opggRegion}.op.gg/summoner/userName=${name}`)).catch(err => {
-    console.log(`playerRankedStats Error:`, err);
-	});
+	const response = await getHTML(encodeURI(`https://${config.opggRegion}.op.gg/summoner/userName=${name}`));
 	const $ = cheerio.load(response.body);
 	const rank = $('[class=TierRank]').text();
 	const wins = $('[class=wins]').text().replace('W', '');
@@ -59,27 +56,23 @@ export async function champJSON() {
 }
 
 export function champJSONIdToName(json, id) {
-	json.forEach(champ => {
-		if (champ.id == id) {
-			return champ.name;
-		}
-	})
+	return json.find(champ => champ.id == id).name;
 }
 
-export async function playerSummary(player) {
-	const [ topChampions, rankedStats, champJSON] = await Promise.all([playerTopChamps(player.summonerId), playerRankedStats(player.summonerName), champJSON()]);
+export async function playerSummary(player, champInfo) {
+	const [ topChampions, rankedStats ] = await Promise.all([playerTopChamps(player.summonerId), playerRankedStats(player.summonerName)]);
 
 	const topChamps = [];
 
 	topChampions.forEach(c => {
-		topChamps.push(champJSONIdToName(champJSON, c.championId));
+		topChamps.push(champJSONIdToName(champInfo, c.championId));
 	});
 
 	return {
 		name: player.summonerName,
 		topThree: topChamps,
 		ranked: rankedStats,
-		currentChamp: champJSONIdToName(champJSON, player.championId),
+		currentChamp: champJSONIdToName(champInfo, player.championId),
 		team: (player.teamId == 100 ? 'Blue' : 'Red')
 	}
 }

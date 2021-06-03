@@ -1,4 +1,4 @@
-export const call = ['help'];
+export const call = ['help', 'Help'];
 
 export function exec(serverProperties) {
 	serverProperties.lastMessage.author.send(
@@ -20,7 +20,7 @@ export function exec(serverProperties) {
 			'resume',
 			'stop',
 			'queue',
-			'remove',
+			'remove (Removes last user queue added song)',
 			'osu *username*',
 			'lolc *username*',
 			'pick',

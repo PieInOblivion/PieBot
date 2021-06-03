@@ -6,7 +6,7 @@ import { audioEvent } from '../common_modules/audioEvent.mjs';
 import { userInVoiceChannel } from '../common_modules/userInVoiceChannel.mjs';
 import { removePrefix } from '../common_modules/removePrefix.mjs';
 
-export const call = ['play ', 'Play ', 'p '];
+export const call = ['play ', 'Play ', 'PLAY ', 'p ', 'P '];
 
 export async function exec(serverProperties) {
 	if (!userInVoiceChannel(serverProperties)) {

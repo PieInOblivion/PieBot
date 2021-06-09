@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import { playerByName, liveGameById, playerSummary, champJSON } from '../common_modules/lol.mjs';
 import { removePrefix } from '../common_modules/removePrefix.mjs';
-import { getAccounts } from './leagueBindAccount.mjs';
+import { lolFile } from '../common_modules/dynamicFile.mjs';
 
 export const call = ['lolc', 'lolc '];
 
@@ -9,8 +9,7 @@ export async function exec(serverProperties) {
 	let searchArg = null;
 
 	if(serverProperties.lastMessage.content === 'lolc') {
-		const accounts = getAccounts();
-		const acc = accounts[serverProperties.lastMessage.author.id];
+		const acc = lolFile[serverProperties.lastMessage.author.id];
 		if (acc) {
 			searchArg = acc;
 		} else {

@@ -1,11 +1,7 @@
 import { MessageEmbed } from 'discord.js';
-import { ObjToFile } from '../common_modules/objToFile.mjs';
+import { rpsFile, updateRPSFile } from '../common_modules/dynamicFile.mjs';
 
 export const call = ['rock', 'paper', 'scissors'];
-
-const rpsScoresLoc = '../secret/rps.json';
-
-const { default: scores } = await import(rpsScoresLoc);
 
 export function exec(serverProperties) {
 	const botPick = call[Math.floor(Math.random() * 3)];
@@ -18,16 +14,16 @@ export function exec(serverProperties) {
 		(serverProperties.lastMessage.content === 'scissors' && botPick === 'rock')
 	) {
 		returnTitle = 'I Won!';
-		scores.botScore++;
-		ObjToFile(rpsScoresLoc, scores);
+		rpsFile.botScore++;
+		updateRPSFile();
 	} else if (
 		(serverProperties.lastMessage.content === 'rock' && botPick === 'scissors') ||
 		(serverProperties.lastMessage.content === 'paper' && botPick === 'rock') ||
 		(serverProperties.lastMessage.content === 'scissors' && botPick === 'paper')
 	) {
 		returnTitle = 'You Won!';
-		scores.userScore++;
-		ObjToFile(rpsScoresLoc, scores);
+		rpsFile.userScore++;
+		updateRPSFile();
 	} else {
 		returnTitle = 'We Tied!';
 	}
@@ -37,7 +33,7 @@ export function exec(serverProperties) {
 			.setTitle(returnTitle)
 			.setAuthor('Scoreboard')
 			.setColor(0x00ffff)
-			.addField('Bot', scores.botScore, true)
-			.addField('Users', scores.userScore, true)
+			.addField('Bot', rpsFile.botScore, true)
+			.addField('Users', rpsFile.userScore, true)
 	);
 }

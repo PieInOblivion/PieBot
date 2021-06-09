@@ -5,7 +5,7 @@ export const call = ['rock', 'paper', 'scissors'];
 
 const rpsScoresLoc = '../secret/rps.json';
 
-const scores = import(rpsScoresLoc);
+const { default: scores } = await import(rpsScoresLoc);
 
 export function exec(serverProperties) {
 	const botPick = call[Math.floor(Math.random() * 3)];

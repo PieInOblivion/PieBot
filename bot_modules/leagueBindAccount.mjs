@@ -5,7 +5,7 @@ import { ObjToFile } from '../common_modules/objToFile.mjs';
 export const call = ['lolb '];
 
 const accountLinkingsLoc = '../secret/lolcBindings.json';
-const accounts = import(accountLinkingsLoc);
+const { default: accounts } = await import(accountLinkingsLoc);
 
 export function getAccounts() {
     return accounts;

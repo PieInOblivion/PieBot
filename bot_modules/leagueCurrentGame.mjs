@@ -6,16 +6,19 @@ import { getAccounts } from './leagueBindAccount.mjs';
 export const call = ['lolc', 'lolc '];
 
 export async function exec(serverProperties) {
-	let searchArg = removePrefix(serverProperties.lastMessage.content);
+	let searchArg = null;
 
-	if(serverProperties.lastMessage.content == 'lolc') {
+	if(serverProperties.lastMessage.content === 'lolc') {
 		const accounts = getAccounts();
 		const acc = accounts[serverProperties.lastMessage.author.id];
 		if (acc) {
 			searchArg = acc;
 		} else {
 			serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xff9900).addField('No LoL Account Binded.', 'First bind an account with: *lolb name*'));
+			return;
 		}
+	} else {
+		searchArg = removePrefix(serverProperties.lastMessage.content);
 	}
 
 	const entryUser = await playerByName(searchArg);

@@ -95,6 +95,9 @@ osu *username*
 ```
 ### League of Legends Live Game Player Summary
 ```
+lolc
+```
+```
 lolc *username*
 ```
 
@@ -105,12 +108,9 @@ lolc *username*
 - League of Legends champion build recommendation
 - Rainbow 6: Siege profile summariser
 - SoundCloud support?
-- Challenge other users to Rock Paper Scissors
-- Challenge other users to Tic-tac-toe (Noughts & Crosses)
 - Optional command prefix support
 - Song discovery engine with your favourite YouTube or Spotify playlist as input
 - Language translation (Automatic translation of text channels outside of the dedicated bot chat)
-- Emoji reaction based voting system
 
 
 ## Usage

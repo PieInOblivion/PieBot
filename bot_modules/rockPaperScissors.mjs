@@ -1,15 +1,11 @@
-import { writeFile } from 'fs';
 import { MessageEmbed } from 'discord.js';
+import { ObjToFile } from '../common_modules/objToFile.mjs';
 
 export const call = ['rock', 'paper', 'scissors'];
 
-import scores from '../secret/rps.json';
+const rpsScoresLoc = '../secret/rps.json';
 
-function updateSave(obj) {
-	writeFile('./secret/rps.json', JSON.stringify(obj), function writeJSON(err) {
-		if (err) return console.log(err);
-	});
-}
+const scores = import(rpsScoresLoc);
 
 export function exec(serverProperties) {
 	const botPick = call[Math.floor(Math.random() * 3)];
@@ -23,7 +19,7 @@ export function exec(serverProperties) {
 	) {
 		returnTitle = 'I Won!';
 		scores.botScore++;
-		updateSave(scores);
+		ObjToFile(rpsScoresLoc, scores);
 	} else if (
 		(serverProperties.lastMessage.content === 'rock' && botPick === 'scissors') ||
 		(serverProperties.lastMessage.content === 'paper' && botPick === 'rock') ||
@@ -31,7 +27,7 @@ export function exec(serverProperties) {
 	) {
 		returnTitle = 'You Won!';
 		scores.userScore++;
-		updateSave(scores);
+		ObjToFile(rpsScoresLoc, scores);
 	} else {
 		returnTitle = 'We Tied!';
 	}

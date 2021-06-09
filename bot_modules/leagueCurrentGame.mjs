@@ -1,11 +1,22 @@
 import { MessageEmbed } from 'discord.js';
 import { playerByName, liveGameById, playerSummary, champJSON } from '../common_modules/lol.mjs';
 import { removePrefix } from '../common_modules/removePrefix.mjs';
+import { getAccounts } from './leagueBindAccount.mjs';
 
-export const call = ['lolc '];
+export const call = ['lolc', 'lolc '];
 
 export async function exec(serverProperties) {
-	const searchArg = removePrefix(serverProperties.lastMessage.content);
+	let searchArg = removePrefix(serverProperties.lastMessage.content);
+
+	if(serverProperties.lastMessage.content == 'lolc') {
+		const accounts = getAccounts();
+		const acc = accounts[serverProperties.lastMessage.author.id];
+		if (acc) {
+			searchArg = acc;
+		} else {
+			serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xff9900).addField('No LoL Account Binded.', 'First bind an account with: *lolb name*'));
+		}
+	}
 
 	const entryUser = await playerByName(searchArg);
 

@@ -1,10 +1,10 @@
 import cheerio from 'cheerio';
-import twisted from 'twisted';
+import { LolApi } from 'twisted';
 import { getJSON, getHTML } from './https.mjs';
 import keysJSON from '../secret/keys.json';
 import config from '../secret/config.json';
 
-const api = new twisted.LolApi({ key: keysJSON.leagueOfLegends });
+const api = new LolApi({ key: keysJSON.leagueOfLegends });
 
 export async function playerByName(name) {
 	const player = await api.Summoner.getByName(name, config.lolRegion).catch(err => {

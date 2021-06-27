@@ -11,7 +11,7 @@ export async function playAudio(serverProperties) {
 	}
 
 	// 50 packets = 1 second
-	serverProperties.dispatcher = serverProperties.voiceChannel.play(await stream, { type: 'opus', bitrate: 'auto', fec: true, volume: false, highWaterMark: 25 });
+	serverProperties.dispatcher = serverProperties.voiceChannel.play(await stream, { type: 'opus', bitrate: 'auto', volume: false, highWaterMark: 25 });
 
 	serverProperties.dispatcher.on('finish', async () => {
 		if (await loadNextSong(serverProperties)) {

@@ -31,7 +31,7 @@ export async function exec(serverProperties) {
 			break;
 
 		case isSpotifyLink(searchArg):
-			const spotifyResult = await spotifyLinkToArray(link);
+			const spotifyResult = await spotifyLinkToArray(searchArg);
 			if (isTrack(searchArg)) {
 				const youtubeResult = await youtubeSearchtoID(spotifyResult);
 				serverProperties.userQueue.push(youtubeResult);

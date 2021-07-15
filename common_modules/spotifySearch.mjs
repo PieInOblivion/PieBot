@@ -7,64 +7,51 @@ const spotify = new SpotifyWebApi({
 	clientSecret: keysJSON.spotifySecret,
 });
 
-export async function spotifyURItoArray(search) {
+async function getAccessToken() {
+	await spotify.clientCredentialsGrant().then((data) => {
+		spotify.setAccessToken(data.body['access_token']);
+	});
+}
+
+export function isSpotifyLink(link) {
+	return (isTrack(link) || isAlbum(link) || isPlaylist(link));
+}
+
+export async function spotifyLinkToArray(link) {
 	await getAccessToken();
 
-	const id = extractID(search);
+    switch (true) {
+        case isTrack(link):
+            return await trackIDtoString(extractID(link));
 
-	if (isSpotifyPlaylist(search)) return await playlistIDtoArr(id);
+        case isAlbum(link):
+            return await albumIDtoArray(extractID(link));
 
-	if (isSpotifyAlbum(search)) return await albumIDtoArr(id);
+        case isPlaylist(link):
+            return await playlistIDtoArray(extractID(link));
+    }
 }
 
-export function addSearchKey(array) {
-	const newArray = [];
-
-	array.forEach((item) => {
-		newArray.push(`${config.spotifySearchKey}${item}`);
-	});
-
-	return newArray;
+export function isTrack(link) {
+    return (link.includes(`:track:`) || link.includes(`/track/`));
 }
 
-export function isSpotifyURI(link) {
-	return (isSpotifyPlaylist(link) || isSpotifyAlbum(link));
+function isAlbum(link) {
+    return (link.includes(`:album:`) || link.includes(`/album/`));
 }
 
-function isSpotifyPlaylist(search) {
-	// spotify:playlist:1vTd1NZxTCIJ851CvRohv7
-	return search.includes('spotify:playlist:');
+function isPlaylist(link) {
+    return (link.includes(`:playlist:`) || link.includes(`/playlist/`));
 }
 
-function isSpotifyAlbum(search) {
-	// spotify:album:7xV2TzoaVc0ycW7fwBwAml
-	return search.includes('spotify:album:');
+async function trackIDtoString(id) {
+    const result = (await spotify.getTrack(id)).body;
+
+    return `${result.artists.map((artist) => artist.name).join(` `)} - ${result.name}`;
 }
 
-function extractID(link) {
-	return link.split(':').pop();
-}
-
-async function playlistIDtoArr(id) {
-	const total = (await spotify.getPlaylistTracks(id, { fields: 'total' })).body.total;
-
-	const turns = Math.ceil(total / config.spotifyApiLimit);
-
-	const ret = [];
-
-	for (let i = 0; i < turns; i++) {
-		const group = await spotify.getPlaylistTracks(id, { offset: config.spotifyApiLimit * i, fields: 'items' });
-
-		group.body.items.forEach((item) => {
-			ret.push(`${item.track.artists.map((artist) => artist.name).join(` `)} - ${item.track.name}`);
-		});
-	}
-
-	return ret;
-}
-
-async function albumIDtoArr(id) {
-	const total = (await spotify.getAlbumTracks(id, { fields: 'total' })).body.total;
+async function albumIDtoArray(id) {
+    const total = (await spotify.getAlbumTracks(id, { fields: 'total' })).body.total;
 
 	const turns = Math.ceil(total / config.spotifyApiLimit);
 
@@ -81,8 +68,48 @@ async function albumIDtoArr(id) {
 	return ret;
 }
 
-async function getAccessToken() {
-	await spotify.clientCredentialsGrant().then((data) => {
-		spotify.setAccessToken(data.body['access_token']);
+async function playlistIDtoArray(id) {
+    const total = (await spotify.getPlaylistTracks(id, { fields: 'total' })).body.total;
+
+	const turns = Math.ceil(total / config.spotifyApiLimit);
+
+	const ret = [];
+
+	for (let i = 0; i < turns; i++) {
+		const group = await spotify.getPlaylistTracks(id, { offset: config.spotifyApiLimit * i, fields: 'items' });
+
+		group.body.items.forEach((item) => {
+			ret.push(`${item.track.artists.map((artist) => artist.name).join(` `)} - ${item.track.name}`);
+		});
+	}
+
+	return ret;
+}
+
+function extractID(link) {
+    // If the link is a URI
+    if (link.split(`:`).length == 3) return link.split(':').pop();
+
+    // If the link is a URL
+    let id = 0;
+
+    const track = link.indexOf(`/track/`);
+    const playlist = link.indexOf(`/playlist/`);
+    const album = link.indexOf(`/album/`);
+
+    id = track !== -1 ? track + 7 : id;
+    id = playlist !== -1 ? playlist + 10 : id;
+    id = album !== -1 ? album + 7: id;
+
+    return link.slice(id, id + 22);
+}
+
+export function addSearchKey(array) {
+	const newArray = [];
+
+	array.forEach((item) => {
+		newArray.push(`${config.spotifySearchKey}${item}`);
 	});
+
+	return newArray;
 }

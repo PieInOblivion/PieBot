@@ -1,6 +1,6 @@
 import { MessageEmbed } from 'discord.js';
 import { youtubeLinkToArray, youtubeSearchtoID, youtubeIDtoTitle, isYoutubeLink } from '../common_modules/ytSearch.mjs';
-import { spotifyURItoArray, addSearchKey, isSpotifyURI } from '../common_modules/spotifySearch.mjs';
+import { spotifyLinkToArray, addSearchKey, isSpotifyLink, isTrack } from '../common_modules/spotifySearch.mjs';
 import { shuffle } from '../common_modules/arrayShuffle.mjs';
 import { audioEvent } from '../common_modules/audioEvent.mjs';
 import { userInVoiceChannel } from '../common_modules/userInVoiceChannel.mjs';
@@ -30,11 +30,16 @@ export async function exec(serverProperties) {
 			}
 			break;
 
-		case isSpotifyURI(searchArg):
-			const spotifyResult = await spotifyURItoArray(searchArg);
-			const searchKeyArray = addSearchKey(spotifyResult);
-			serverProperties.playlistQueue.push(...shuffle(searchKeyArray));
-			playlistQueueMessage(serverProperties, spotifyResult.length);
+		case isSpotifyLink(searchArg):
+			const spotifyResult = await spotifyLinkToArray(link);
+			if (isTrack(searchArg)) {
+				const youtubeResult = await youtubeSearchtoID(spotifyResult);
+				serverProperties.userQueue.push(youtubeResult);
+				userQueueMessage(serverProperties, youtubeResult);
+			} else {
+				serverProperties.playlistQueue.push(...shuffle(addSearchKey(spotifyResult)));
+				playlistQueueMessage(serverProperties, spotifyResult.length);
+			}
 			break;
 
 		default:

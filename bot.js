@@ -1,7 +1,7 @@
 import { readdirSync } from 'fs';
 
 // Discrete Bot Modules
-import { Client, MessageEmbed } from 'discord.js';
+import { Client, Intents, MessageEmbed } from 'discord.js';
 import { log } from './common_modules/log.mjs';
 import { resetProperties } from './common_modules/resetServerProperties.mjs';
 
@@ -23,17 +23,18 @@ readdirSync('./bot_modules').forEach(moduleName => {
 	});
 });
 
-const client = new Client();
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const serverPropertiesTable = {};
 
-channelsJSON.forEach(channelID => {
-	serverPropertiesTable[channelID] = {
+channelsJSON.forEach(serverInfo => {
+	serverPropertiesTable[serverInfo.guildId] = {
+		channelId: serverInfo.channelId,
 		userQueue: [],
 		playlistQueue: [],
 		playing: null,
 		repeat: false,
-		voiceChannel: null,
-		dispatcher: null,
+		voiceConnection: null,
+		audioPlayer: null,
 		lastMessage: null
 	}
 });
@@ -51,24 +52,24 @@ client.on('reconnecting', () => {
 	log(`Connecting...`);
 });
 
-client.on('voiceStateUpdate', async () => {
-	// This will not scale well and could be improved in the future
-	// Such as, get server ID which the channel update occured in and check only that voice channel
-	Object.keys(serverPropertiesTable).forEach(botTextChannelID => {
-		const serverProperties = serverPropertiesTable[botTextChannelID];
-		if (serverProperties.voiceChannel != null && serverProperties.voiceChannel.channel.members.size == 1) {
-			resetProperties(serverProperties);
-		}
-	});
+client.on('voiceStateUpdate', async (oldState, newState) => {
+	if (oldState.channel?.members.size === 1 && oldState.channel?.members.has(client.user.id)) {
+		resetProperties(serverPropertiesTable[oldState.guild.id]);
+	}
+
+	if (newState.channel?.members.size === 1 && newState.channel?.members.has(client.user.id)) {
+		resetProperties(serverPropertiesTable[newState.guild.id]);
+	}
 });
 
-client.on('message', async (msg) => {
+client.on('messageCreate', async (msg) => {
 	try {
-		// Filter messages to certain voice channels and NOT from itself
-		if (serverPropertiesTable.hasOwnProperty(msg.channel.id) && !msg.author.bot) {
-			log(`Channel Message:`, msg.content);
-			serverPropertiesTable[msg.channel.id].lastMessage = msg;
-			parseRequest(serverPropertiesTable[msg.channel.id]);
+		if (serverPropertiesTable.hasOwnProperty(msg.guild.id) && !msg.author.bot) {
+			if (serverPropertiesTable[msg.guild.id].channelId === msg.channel.id) {
+				log(`Channel Message:`, msg.content);
+				serverPropertiesTable[msg.guild.id].lastMessage = msg;
+				parseRequest(serverPropertiesTable[msg.guild.id]);
+			}
 		}
 	} catch (err) {
 		log(`Message error:`, err);

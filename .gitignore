@@ -1,4 +1,3 @@
 node_modules/
 secret/
 .vscode/
-bot_modules/ip.mjs

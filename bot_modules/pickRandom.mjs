@@ -17,11 +17,11 @@ export function exec(serverProperties) {
 
 	const res = Math.floor(Math.random() * (max - min + 1) + min);
 
-	serverProperties.lastMessage.channel.send(
+	serverProperties.lastMessage.channel.send({ embeds: [
 		new MessageEmbed()
 			.setTitle(`I pick ${res}`)
-			.addField('min', min, true)
-			.addField('max', max, true)
+			.addField('min', min.toString(), true)
+			.addField('max', max.toString(), true)
 			.setColor(0x00ffff)
-	);
+	]});
 }

@@ -3,10 +3,10 @@ import { MessageEmbed } from 'discord.js';
 export const call = ['repeat'];
 
 export function exec(serverProperties) {
-	if (!serverProperties.dispatcher) {
-		serverProperties.lastMessage.channel.send(
+	if (!serverProperties.playing) {
+		serverProperties.lastMessage.channel.send({ embeds: [
 			new MessageEmbed().setColor(0xff9900).addField('Nice.', `I'm not currently playing anything`)
-		);
+		]});
 		return;
 	}
 
@@ -26,9 +26,9 @@ export function exec(serverProperties) {
 		serverProperties.repeat = !serverProperties.repeat;
 	}
 
-	serverProperties.lastMessage.channel.send(
+	serverProperties.lastMessage.channel.send({ embeds: [
 		new MessageEmbed()
 			.setColor(0x00ffff)
 			.addField('Repeat:', (serverProperties.repeat ? 'Yes' : 'No'))
-	);
+	]});
 }

@@ -9,5 +9,5 @@ export function exec(serverProperties) {
 
     updateLolFile();
 
-    serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0x00ffff).setTitle('Linked'));
+    serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0x00ffff).setTitle('Linked')]});
 }

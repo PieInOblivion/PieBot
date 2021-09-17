@@ -28,12 +28,12 @@ export function exec(serverProperties) {
 		returnTitle = 'We Tied!';
 	}
 
-	serverProperties.lastMessage.channel.send(
+	serverProperties.lastMessage.channel.send({ embeds: [
 		new MessageEmbed()
 			.setTitle(returnTitle)
 			.setAuthor('Scoreboard')
 			.setColor(0x00ffff)
-			.addField('Bot', rpsFile.botScore, true)
-			.addField('Users', rpsFile.userScore, true)
-	);
+			.addField('Bot', rpsFile.botScore.toString(), true)
+			.addField('Users', rpsFile.userScore.toString(), true)
+	]});
 }

@@ -1,21 +1,17 @@
 export async function resetProperties(serverProperties) {
-	if (serverProperties.dispatcher != null) {
-		await serverProperties.dispatcher.destroy();
-	}
-
-	if (serverProperties.voiceChannel != null) {
-		await serverProperties.voiceChannel.disconnect();
+	if (serverProperties.playing != null) {
+		serverProperties.playing = null;
+		serverProperties?.voiceConnection.destroy();
+		serverProperties?.audioPlayer.stop(true);
 	}
 
 	serverProperties.userQueue = [];
 
 	serverProperties.playlistQueue = [];
 
-	serverProperties.playing = null;
-
 	serverProperties.repeat = false;
 
-	serverProperties.voiceChannel = null;
+	serverProperties.voiceConnection = null;
 
-	serverProperties.dispatcher = null;
+	serverProperties.audioPlayer = null;
 }

@@ -13,7 +13,7 @@ export async function exec(serverProperties) {
 		if (acc) {
 			searchArg = acc;
 		} else {
-			serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xff9900).addField('No LoL Account Binded.', 'First bind an account with: *lolb name*'));
+			serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xff9900).addField('No LoL Account Binded.', 'First bind an account with: *lolb name*')]});
 			return;
 		}
 	} else {
@@ -23,18 +23,18 @@ export async function exec(serverProperties) {
 	const entryUser = await playerByName(searchArg);
 
 	if (!entryUser) {
-		serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xff9900).addField('Unlucky.', 'Could not find that player in OCE'));
+		serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xff9900).addField('Unlucky.', 'Could not find that player in OCE')]});
 		return;
 	}
 
 	const liveGame = await liveGameById(entryUser.id);
 
 	if (!liveGame) {
-		serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xff9900).addField('Unlucky.', `Player doesn't appear to be in a game`));
+		serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xff9900).addField('Unlucky.', `Player doesn't appear to be in a game`)]});
 		return;
 	}
 
-	serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xe19205).setTitle(`Game Found: Loading...`));
+	serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xe19205).setTitle(`Game Found: Loading...`)]});
 
 	const liveGamePlayers = [];
 
@@ -69,7 +69,5 @@ export async function exec(serverProperties) {
 		}
 	});
 	
-	serverProperties.lastMessage.channel.send(new MessageEmbed().setColor(0xe19205).setTitle(`${entryUser.name}'s Live Game Players`));
-	serverProperties.lastMessage.channel.send(blueReturnMessage);
-	serverProperties.lastMessage.channel.send(redReturnMessage);
+	serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xe19205).setTitle(`${entryUser.name}'s Live Game Players`), blueReturnMessage, redReturnMessage]});
 }

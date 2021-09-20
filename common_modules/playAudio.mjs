@@ -29,8 +29,8 @@ export async function playAudio(serverProperties) {
 	serverProperties.audioPlayer = await entersState(player, AudioPlayerStatus.Playing, 5_000);
 	serverProperties.voiceConnection.subscribe(serverProperties.audioPlayer);
 
-
 	serverProperties.audioPlayer.on(AudioPlayerStatus.Idle, async () => {
+		stream.destroy();
 		if (await loadNextSong(serverProperties)) {
 			playAudio(serverProperties);
 		} else {

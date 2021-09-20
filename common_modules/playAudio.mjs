@@ -12,7 +12,8 @@ import { resetProperties } from './resetServerProperties.mjs';
 import ytdl from 'ytdl-core';
 
 export async function playAudio(serverProperties) {
-	const stream = ytdl(serverProperties.playing, { filter: 'audioonly', quality: 'highestaudio', highWaterMark: 1<<25 });
+	// 1<25 = 32MB
+	const stream = ytdl(serverProperties.playing, { filter: 'audioonly', quality: 'highestaudio', highWaterMark: 1<<27 });
 
 	if (!serverProperties.voiceConnection) {
 		serverProperties.voiceConnection = await joinVoiceChannel({

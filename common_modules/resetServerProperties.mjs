@@ -8,7 +8,7 @@ export async function resetProperties(serverProperties) {
 	if (serverProperties.playing != null) {
 		serverProperties.playing = null;
 		serverProperties?.voiceConnection.destroy();
-		serverProperties?.audioPlayer.stop(true);
+		serverProperties?.audioPlayer?.stop(true);
 	}
 
 	serverProperties.voiceConnection = null;

@@ -5,15 +5,14 @@ import {
 	createAudioPlayer,
 	createAudioResource,
 	AudioPlayerStatus,
-	StreamType
+	NoSubscriberBehavior,
 } from '@discordjs/voice';
 import { loadNextSong } from './loadNextSong.mjs';
 import { resetProperties } from './resetServerProperties.mjs';
-import ytdl from 'ytdl-core';
+import play from 'play-dl';
 
 export async function playAudio(serverProperties) {
-	// 1<25 = 32MB
-	const stream = ytdl(serverProperties.playing, { filter: 'audioonly', quality: 'highestaudio', highWaterMark: 1<<27 });
+	let stream = await play.stream(serverProperties.playing);
 
 	if (!serverProperties.voiceConnection) {
 		serverProperties.voiceConnection = await joinVoiceChannel({
@@ -23,22 +22,39 @@ export async function playAudio(serverProperties) {
 		});
 	}
 
-	const player = createAudioPlayer();
-	const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
+	let resource = createAudioResource(stream.stream, { inputType: stream.type });
+
+	let player = createAudioPlayer({
+		behaviors: {
+			noSubscriber: NoSubscriberBehavior.Play
+	}});
+
 	player.play(resource);
-	serverProperties.audioPlayer = await entersState(player, AudioPlayerStatus.Playing, 5_000);
-	serverProperties.voiceConnection.subscribe(serverProperties.audioPlayer);
 
-	serverProperties.audioPlayer.on(AudioPlayerStatus.Idle, async () => {
-		stream.destroy();
-		if (await loadNextSong(serverProperties)) {
-			playAudio(serverProperties);
-		} else {
-			serverProperties.lastMessage.channel.send({ embeds: [
-				new MessageEmbed().setColor(0x00ffff).setTitle(`Song queue is empty`)
-			]});
-
-			resetProperties(serverProperties);
-		}
+	serverProperties.audioPlayer = await entersState(player, AudioPlayerStatus.Playing, 5_000).catch(async err => {
+		serverProperties.lastMessage.channel.send({ embeds: [
+			new MessageEmbed().setColor(0xff0000).setTitle(`Song download failed`)
+		]});
+		console.log("enterState:", err);
+		console.log("serverProperties:", serverProperties);
+		songEnded(serverProperties);
 	});
+
+	serverProperties.voiceConnection?.subscribe(player);
+
+	serverProperties.audioPlayer?.on(AudioPlayerStatus.Idle, async () => {
+		songEnded(serverProperties);
+	});
+}
+
+async function songEnded(serverProperties) {
+	if (await loadNextSong(serverProperties)) {
+		playAudio(serverProperties);
+	} else {
+		serverProperties.lastMessage.channel.send({ embeds: [
+			new MessageEmbed().setColor(0x00ffff).setTitle(`Song queue is empty`)
+		]});
+
+		resetProperties(serverProperties);
+	}
 }

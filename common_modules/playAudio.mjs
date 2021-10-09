@@ -5,46 +5,44 @@ import {
 	createAudioPlayer,
 	createAudioResource,
 	AudioPlayerStatus,
-	NoSubscriberBehavior,
 } from '@discordjs/voice';
 import { loadNextSong } from './loadNextSong.mjs';
 import { resetProperties } from './resetServerProperties.mjs';
-import play from 'play-dl';
+import { stream } from 'play-dl';
 
 export async function playAudio(serverProperties) {
-	let stream = await play.stream(serverProperties.playing);
-
-	if (!serverProperties.voiceConnection) {
-		serverProperties.voiceConnection = await joinVoiceChannel({
-			channelId: serverProperties.lastMessage.member.voice.channel.id,
-			guildId: serverProperties.lastMessage.member.voice.channel.guildId,
-			adapterCreator: serverProperties.lastMessage.member.voice.channel.guild.voiceAdapterCreator
-		});
-	}
-
-	let resource = createAudioResource(stream.stream, { inputType: stream.type });
-
-	let player = createAudioPlayer({
-		behaviors: {
-			noSubscriber: NoSubscriberBehavior.Play
-	}});
-
-	player.play(resource);
-
-	serverProperties.audioPlayer = await entersState(player, AudioPlayerStatus.Playing, 5_000).catch(async err => {
+	const source = await stream(serverProperties.playing).catch(err => {
 		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0xff0000).setTitle(`Song download failed`)
+			new MessageEmbed().setColor(0xff0000).setTitle(`Song download failed: https://www.youtube.com/watch?v=${serverProperties.playing}`)
 		]});
 		console.log("enterState:", err);
 		console.log("serverProperties:", serverProperties);
 		songEnded(serverProperties);
 	});
 
-	serverProperties.voiceConnection?.subscribe(player);
+	if (source) {
+		if (!serverProperties.voiceConnection) {
+			serverProperties.voiceConnection = await joinVoiceChannel({
+				channelId: serverProperties.lastMessage.member.voice.channel.id,
+				guildId: serverProperties.lastMessage.member.voice.channel.guildId,
+				adapterCreator: serverProperties.lastMessage.member.voice.channel.guild.voiceAdapterCreator
+			});
+		}
 
-	serverProperties.audioPlayer?.on(AudioPlayerStatus.Idle, async () => {
-		songEnded(serverProperties);
-	});
+		const resource = createAudioResource(source.stream, { inputType: source.type });
+
+		const player = createAudioPlayer();
+
+		player.play(resource);
+
+		serverProperties.audioPlayer = await entersState(player, AudioPlayerStatus.Playing, 5_000);
+
+		serverProperties.voiceConnection.subscribe(player);
+
+		serverProperties.audioPlayer.on(AudioPlayerStatus.Idle, () => {
+			songEnded(serverProperties);
+		});
+	}
 }
 
 async function songEnded(serverProperties) {

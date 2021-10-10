@@ -20,11 +20,11 @@
     "discord.js": "^13.2.0",
     "got": "^11.8.2",
     "node-osu": "^2.2.1",
-    "play-dl": "^1.0.8",
+    "play-dl": "^1.1.0",
     "simple-youtube-api": "^5.2.1",
     "sodium": "^3.0.2",
     "spotify-web-api-node": "^5.0.2",
-    "twisted": "^1.46.2",
+    "twisted": "^1.46.3",
     "utf-8-validate": "^5.0.6",
     "zlib-sync": "^0.1.7"
   },

@@ -15,17 +15,17 @@
   "dependencies": {
     "@discordjs/opus": "^0.6.0",
     "@discordjs/voice": "^0.6.0",
-    "bufferutil": "^4.0.4",
+    "bufferutil": "^4.0.5",
     "cheerio": "^1.0.0-rc.10",
     "discord.js": "^13.2.0",
     "got": "^11.8.2",
     "node-osu": "^2.2.1",
-    "play-dl": "^1.1.5",
+    "play-dl": "^1.1.7",
     "simple-youtube-api": "^5.2.1",
     "sodium": "^3.0.2",
     "spotify-web-api-node": "^5.0.2",
     "twisted": "^1.46.3",
-    "utf-8-validate": "^5.0.6",
+    "utf-8-validate": "^5.0.7",
     "zlib-sync": "^0.1.7"
   },
   "scripts": {

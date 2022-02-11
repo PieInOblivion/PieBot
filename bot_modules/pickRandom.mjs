@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { msgPickRandom } from '../common_modules/messageResponses.mjs';
 
 export const call = ['pick'];
 
@@ -17,11 +17,5 @@ export function exec(serverProperties) {
 
 	const res = Math.floor(Math.random() * (max - min + 1) + min);
 
-	serverProperties.lastMessage.channel.send({ embeds: [
-		new MessageEmbed()
-			.setTitle(`I pick ${res}`)
-			.addField('min', min.toString(), true)
-			.addField('max', max.toString(), true)
-			.setColor(0x00ffff)
-	]});
+	msgPickRandom(serverProperties, res, min, max);
 }

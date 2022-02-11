@@ -1,4 +1,9 @@
-import { MessageEmbed } from 'discord.js';
+import {
+	msgNotInVoiceChannel,
+	msgPlayAddedSong,
+	msgPlayNowPlaying,
+	msgPlayQueueStats
+} from '../common_modules/messageResponses.mjs';
 import { youtubeLinkToArray, youtubeSearchtoID, youtubeIDtoTitle, isYoutubeLink } from '../common_modules/ytSearch.mjs';
 import { spotifyLinkToArray, addSearchKey, isSpotifyLink, isTrack } from '../common_modules/spotifySearch.mjs';
 import { shuffle } from '../common_modules/arrayShuffle.mjs';
@@ -10,9 +15,7 @@ export const call = ['play ', 'Play ', 'PLAY ', 'p ', 'P '];
 
 export async function exec(serverProperties) {
 	if (!userInVoiceChannel(serverProperties)) {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0xff9900).addField("I can't see you", 'Please be in a voice channel first!')
-		]});
+		msgNotInVoiceChannel(serverProperties);
 		return;
 	}
 
@@ -52,33 +55,15 @@ export async function exec(serverProperties) {
 }
 
 async function playlistQueueMessage(serverProperties, addedPlaylistSongsLength) {
-	serverProperties.lastMessage.channel.send({ embeds: [
-		new MessageEmbed()
-			.setTitle(`Queue Stats`)
-			.addField(`User Queue: ${serverProperties.userQueue.length}`, `0 Added`, true)
-			.addField(`Playlist Queue: ${serverProperties.playlistQueue.length}`, `${addedPlaylistSongsLength} Added`, true)
-			.setColor(0x00ffff)
-	]});
+	msgPlayQueueStats(serverProperties, addedPlaylistSongsLength);
 }
 
 async function userQueueMessage(serverProperties, IDAdded) {
 	const title = await youtubeIDtoTitle(IDAdded);
 
 	if (serverProperties.userQueue.length === 0) {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed()
-				.setColor(0x00ffff)
-				.setTitle('Now Playing:')
-				.addField(title, `**https://www.youtube.com/watch?v=${IDAdded}**`)
-		]});
+		msgPlayNowPlaying(serverProperties, title, IDAdded);
 	} else {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed()
-				.setColor(0x00ffff)
-				.setTitle('Added to queue:')
-				.addField(title, `**https://www.youtube.com/watch?v=${IDAdded}**`)
-				.addField(`User Queue Length:`, serverProperties.userQueue.length.toString(), true)
-				.addField(`Playlist Queue Length:`, serverProperties.playlistQueue.length.toString(), true)
-		]});
+		msgPlayAddedSong(serverProperties, title, IDAdded);
 	}
 }

@@ -1,12 +1,10 @@
-import { MessageEmbed } from 'discord.js';
+import { msgNotPlaying, msgRepeatChange } from '../common_modules/messageResponses.mjs';
 
 export const call = ['repeat'];
 
 export function exec(serverProperties) {
 	if (!serverProperties.playing) {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0xff9900).addField('Nice.', `I'm not currently playing anything`)
-		]});
+		msgNotPlaying(serverProperties);
 		return;
 	}
 
@@ -26,9 +24,5 @@ export function exec(serverProperties) {
 		serverProperties.repeat = !serverProperties.repeat;
 	}
 
-	serverProperties.lastMessage.channel.send({ embeds: [
-		new MessageEmbed()
-			.setColor(0x00ffff)
-			.addField('Repeat:', (serverProperties.repeat ? 'Yes' : 'No'))
-	]});
+	msgRepeatChange(serverProperties);
 }

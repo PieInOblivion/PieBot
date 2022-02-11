@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { msgRPSResult } from '../common_modules/messageResponses.mjs';
 import { rpsFile, updateRPSFile } from '../common_modules/dynamicFile.mjs';
 
 export const call = ['rock', 'paper', 'scissors'];
@@ -28,12 +28,5 @@ export function exec(serverProperties) {
 		returnTitle = 'We Tied!';
 	}
 
-	serverProperties.lastMessage.channel.send({ embeds: [
-		new MessageEmbed()
-			.setTitle(returnTitle)
-			.setAuthor('Scoreboard')
-			.setColor(0x00ffff)
-			.addField('Bot', rpsFile.botScore.toString(), true)
-			.addField('Users', rpsFile.userScore.toString(), true)
-	]});
+	msgRPSResult(serverProperties, returnTitle, rpsFile.botScore, rpsFile.userScore);
 }

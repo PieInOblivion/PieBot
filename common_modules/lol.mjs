@@ -1,8 +1,8 @@
 import cheerio from 'cheerio';
 import { LolApi } from 'twisted';
 import { getJSON, getHTML } from './https.mjs';
-import keysJSON from '../secret/keys.json';
-import config from '../secret/config.json';
+import keysJSON from '../secret/keys.json' assert {type: "json"};
+import config from '../secret/config.json' assert {type: "json"};
 
 const api = new LolApi({ key: keysJSON.leagueOfLegends });
 

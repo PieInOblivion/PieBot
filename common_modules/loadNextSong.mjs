@@ -1,5 +1,5 @@
 import { youtubeSearchtoID } from './ytSearch.mjs';
-import config from '../secret/config.json';
+import config from '../secret/config.json' assert {type: "json"};
 
 export async function loadNextSong(serverProperties) {
 	if (serverProperties.repeat) return true;

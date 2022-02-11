@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { msgBinded } from '../common_modules/messageResponses.mjs';
 import { removePrefix } from '../common_modules/removePrefix.mjs';
 import { lolFile, updateLolFile } from '../common_modules/dynamicFile.mjs';
 
@@ -9,5 +9,5 @@ export function exec(serverProperties) {
 
     updateLolFile();
 
-    serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0x00ffff).setTitle('Linked')]});
+    msgBinded(serverProperties);
 }

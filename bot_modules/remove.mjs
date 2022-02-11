@@ -1,18 +1,14 @@
-import { MessageEmbed } from 'discord.js';
+import { msgRemoveLastSong, msgRemoveNoSongs } from '../common_modules/messageResponses.mjs';
 
 export const call = ['remove'];
 
 export function exec(serverProperties) {
 	if (!serverProperties.playing || serverProperties.userQueue.length == 0) {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0xff9900).addField('Nice.', `No songs in user queue to remove`)
-		]});
+		msgRemoveNoSongs(serverProperties);
 		return;
 	}
 
 	serverProperties.userQueue.pop();
 
-	serverProperties.lastMessage.channel.send({ embeds: [
-		new MessageEmbed().setColor(0x00ffff).setTitle('Removed last song added to user queue')
-	]});
+	msgRemoveLastSong(serverProperties);
 }

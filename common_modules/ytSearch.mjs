@@ -1,5 +1,5 @@
 import YouTubeApi from 'simple-youtube-api';
-import keysJSON from '../secret/keys.json';
+import keysJSON from '../secret/keys.json' assert {type: "json"};
 
 const youtube = new YouTubeApi(keysJSON.youtube);
 

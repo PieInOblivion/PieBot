@@ -1,13 +1,13 @@
 import { readdirSync } from 'fs';
 
 // Discrete Bot Modules
-import { Client, Intents, MessageEmbed } from 'discord.js';
+import { Client, Intents } from 'discord.js';
 import { log } from './common_modules/log.mjs';
 import { resetProperties } from './common_modules/resetServerProperties.mjs';
 
 // Bot Info
-import channelsJSON from './secret/channels.json';
-import keysJSON from './secret/keys.json';
+import channelsJSON from './secret/channels.json' assert {type: "json"};
+import keysJSON from './secret/keys.json' assert {type: "json"};
 
 const commands = {};
 
@@ -63,21 +63,12 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
 });
 
 client.on('messageCreate', async (msg) => {
-	try {
-		if (serverPropertiesTable.hasOwnProperty(msg.guild.id) && !msg.author.bot) {
-			if (serverPropertiesTable[msg.guild.id].channelId === msg.channel.id) {
-				log(`Channel Message:`, msg.content);
-				serverPropertiesTable[msg.guild.id].lastMessage = msg;
-				parseRequest(serverPropertiesTable[msg.guild.id]);
-			}
+	if (serverPropertiesTable.hasOwnProperty(msg.guild.id) && !msg.author.bot) {
+		if (serverPropertiesTable[msg.guild.id].channelId === msg.channel.id) {
+			log(`Channel Message:`, msg.content);
+			serverPropertiesTable[msg.guild.id].lastMessage = msg;
+			parseRequest(serverPropertiesTable[msg.guild.id]);
 		}
-	} catch (err) {
-		log(`Message error:`, err);
-		serverPropertiesTable[msg.channel.id].lastMessage.channel.send(new MessageEmbed()	
-			.setTitle('Whoops!')
-			.setAuthor(`That last command didn't work`)
-			.setColor(0xff0000)
-		);
 	}
 });
 

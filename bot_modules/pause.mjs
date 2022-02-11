@@ -1,17 +1,13 @@
-import { MessageEmbed } from 'discord.js';
+import { msgNotPlaying, msgPaused } from '../common_modules/messageResponses.mjs';
 
 export const call = ['pause'];
 
 export function exec(serverProperties) {
 	if (!serverProperties.playing) {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0xff9900).addField('Nice.', `I'm not currently playing anything`)
-		]});
+		msgNotPlaying(serverProperties);
 		return;
 	}
 
 	serverProperties.audioPlayer.pause();
-	serverProperties.lastMessage.channel.send({ embeds: [
-		new MessageEmbed().setColor(0x00ffff).setTitle('Paused')
-	]});
+	msgPaused(serverProperties);
 }

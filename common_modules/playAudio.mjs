@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { msgPlayFailed, msgPlayQueueEmpty } from './messageResponses.mjs';
 import {
 	entersState,
 	joinVoiceChannel,
@@ -12,9 +12,7 @@ import { stream } from 'play-dl';
 
 export async function playAudio(serverProperties) {
 	const source = await stream(serverProperties.playing).catch(err => {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0xff0000).setTitle(`Song download failed: https://www.youtube.com/watch?v=${serverProperties.playing}`)
-		]});
+		msgPlayFailed(serverProperties);
 		console.log("enterState:", err);
 		console.log("serverProperties:", serverProperties);
 		songEnded(serverProperties);
@@ -49,9 +47,7 @@ async function songEnded(serverProperties) {
 	if (await loadNextSong(serverProperties)) {
 		playAudio(serverProperties);
 	} else {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0x00ffff).setTitle(`Song queue is empty`)
-		]});
+		msgPlayQueueEmpty(serverProperties);
 
 		resetProperties(serverProperties);
 	}

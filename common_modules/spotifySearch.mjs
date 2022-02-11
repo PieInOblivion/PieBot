@@ -1,6 +1,6 @@
 import SpotifyWebApi from 'spotify-web-api-node';
-import keysJSON from '../secret/keys.json';
-import config from '../secret/config.json';
+import keysJSON from '../secret/keys.json' assert {type: "json"};
+import config from '../secret/config.json' assert {type: "json"};
 
 const spotify = new SpotifyWebApi({
 	clientId: keysJSON.spotifyId,

@@ -1,4 +1,10 @@
-import { MessageEmbed } from 'discord.js';
+import {
+	msgLolNotBinded,
+	msgLolPlayerDoesntExist,
+	msgLolPlayerNotInGame,
+	msgLolLoadingGameData,
+	msgLolPlayerSummary
+} from '../common_modules/messageResponses.mjs';
 import { playerByName, liveGameById, playerSummary, champJSON } from '../common_modules/lol.mjs';
 import { removePrefix } from '../common_modules/removePrefix.mjs';
 import { lolFile } from '../common_modules/dynamicFile.mjs';
@@ -13,7 +19,7 @@ export async function exec(serverProperties) {
 		if (acc) {
 			searchArg = acc;
 		} else {
-			serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xff9900).addField('No LoL Account Binded.', 'First bind an account with: *lolb name*')]});
+			msgLolNotBinded(serverProperties);
 			return;
 		}
 	} else {
@@ -23,18 +29,18 @@ export async function exec(serverProperties) {
 	const entryUser = await playerByName(searchArg);
 
 	if (!entryUser) {
-		serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xff9900).addField('Unlucky.', 'Could not find that player in OCE')]});
+		msgLolPlayerDoesntExist(serverProperties);
 		return;
 	}
 
 	const liveGame = await liveGameById(entryUser.id);
 
 	if (!liveGame) {
-		serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xff9900).addField('Unlucky.', `Player doesn't appear to be in a game`)]});
+		msgLolPlayerNotInGame(serverProperties);
 		return;
 	}
 
-	serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xe19205).setTitle(`Game Found: Loading...`)]});
+	msgLolLoadingGameData(serverProperties)
 
 	const liveGamePlayers = [];
 
@@ -48,8 +54,17 @@ export async function exec(serverProperties) {
 		player.stats = await playerSummary(player.playerProfile, championJSON);
 	}));
 
-	const blueReturnMessage = new MessageEmbed().setColor(0x1f8ecd).setTitle(`Blue Side`);
-	const redReturnMessage = new MessageEmbed().setColor(0xee5a52).setTitle(`Red Side`);
+	const blueTeamInfo = {
+		title: `Blue Side`,
+		color: 0x1f8ecd,
+		fields: []
+	};
+
+	const redTeamInfo = {
+		title: `Red Side`,
+		color: 0xee5a52,
+		fields: []
+	};
 
 	liveGamePlayers.forEach(p => {
 		const returnPlayerTitle = `${p.stats.name} - ${p.stats.currentChamp}`;
@@ -62,12 +77,12 @@ export async function exec(serverProperties) {
 
 		let returnPlayerInfo = `${p.stats.ranked.r}\n${p.stats.ranked.w}W ${p.stats.ranked.l}L / ${p.stats.ranked.wr} WR\nTop Champs: ${returnPlayerTopChamps.join(', ')}`;
 
-		if (p.stats.team == 'Blue') {
-			blueReturnMessage.addField(returnPlayerTitle, returnPlayerInfo);
+		if (p.stats.team == `Blue`) {
+			blueTeamInfo.fields.push({name: returnPlayerTitle, value: returnPlayerInfo});
 		} else {
-			redReturnMessage.addField(returnPlayerTitle, returnPlayerInfo);
+			redTeamInfo.fields.push({name: returnPlayerTitle, value: returnPlayerInfo});
 		}
 	});
-	
-	serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed().setColor(0xe19205).setTitle(`${entryUser.name}'s Live Game Players`), blueReturnMessage, redReturnMessage]});
+
+	msgLolPlayerSummary(serverProperties, { title: `${entryUser.name}'s Live Game Players`, color: 0xe19205}, blueTeamInfo, redTeamInfo);
 }

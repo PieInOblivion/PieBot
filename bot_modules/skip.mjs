@@ -1,18 +1,14 @@
-import { MessageEmbed } from 'discord.js';
+import { msgSkipFailed, msgSkipped } from '../common_modules/messageResponses.mjs';
 
 export const call = ['skip'];
 
 export function exec(serverProperties) {
 	if (!serverProperties.playing || (serverProperties.userQueue.length == 0 && serverProperties.playlistQueue.length == 0)) {
-		serverProperties.lastMessage.channel.send({ embeds: [
-			new MessageEmbed().setColor(0xff9900).addField('Nice.', 'Only one song in queue or not currently playing')
-		]});
+		msgSkipFailed(serverProperties);
 		return;
 	}
 
 	serverProperties.audioPlayer.stop();
-	serverProperties.lastMessage.channel.send({ embeds: [
-		new MessageEmbed().setColor(0x00ffff).setTitle('Skipped')
-	]});
+	msgSkipped(serverProperties);
 	serverProperties.repeat = false;
 }

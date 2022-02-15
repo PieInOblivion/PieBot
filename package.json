@@ -1,6 +1,6 @@
 {
   "name": "piebot",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "PieInOblivion's personal use Discord bot built with discord.js",
   "main": "bot.js",
   "author": "Lucas Hofmockel-Spanakis",
@@ -10,7 +10,7 @@
   "repository": "github:PieInOblivion/piebot",
   "bugs": "https://github.com/PieInOblivion/piebot/issues",
   "engines": {
-    "node": ">=16.6.0"
+    "node": ">=17.0.0"
   },
   "dependencies": {
     "@discordjs/opus": "^0.7.0",

@@ -2,7 +2,8 @@ import {
 	msgNotInVoiceChannel,
 	msgPlayAddedSong,
 	msgPlayNowPlaying,
-	msgPlayQueueStats
+	msgPlayQueueStats,
+	msgYouTubeSearchFailed
 } from '../common_modules/messageResponses.mjs';
 import { youtubeLinkToArray, youtubeSearchtoID, youtubeIDtoTitle, isYoutubeLink } from '../common_modules/ytSearch.mjs';
 import { spotifyLinkToArray, addSearchKey, isSpotifyLink, isTrack } from '../common_modules/spotifySearch.mjs';
@@ -37,6 +38,10 @@ export async function exec(serverProperties) {
 			const spotifyResult = await spotifyLinkToArray(searchArg);
 			if (isTrack(searchArg)) {
 				const youtubeResult = await youtubeSearchtoID(spotifyResult);
+				if (!youtubeResult) {
+					msgYouTubeSearchFailed(serverProperties, spotifyResult);
+					return;
+				}
 				serverProperties.userQueue.push(youtubeResult);
 				userQueueMessage(serverProperties, youtubeResult);
 			} else {
@@ -47,6 +52,10 @@ export async function exec(serverProperties) {
 
 		default:
 			const searchResult = await youtubeSearchtoID(searchArg);
+			if (!searchResult) {
+				msgYouTubeSearchFailed(serverProperties, searchArg);
+				return;
+			}
 			serverProperties.userQueue.push(searchResult);
 			userQueueMessage(serverProperties, searchResult);
 	}

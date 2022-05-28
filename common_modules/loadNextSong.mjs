@@ -1,3 +1,4 @@
+import { msgYouTubeSearchFailed } from './messageResponses.mjs';
 import { youtubeSearchtoID } from './ytSearch.mjs';
 import config from '../secret/config.json' assert {type: "json"};
 
@@ -12,9 +13,12 @@ export async function loadNextSong(serverProperties) {
 		return true;
 	} else if (serverProperties.playlistQueue.length > 0) {
 		if (serverProperties.playlistQueue[0].startsWith(config.spotifySearchKey)) {
-			serverProperties.playing = await youtubeSearchtoID(
-				serverProperties.playlistQueue[0].replace(config.spotifySearchKey, '')
-			);
+			const searchArg = serverProperties.playlistQueue[0].replace(config.spotifySearchKey, '');
+			serverProperties.playing = await youtubeSearchtoID(searchArg);
+			if (!serverProperties.playing) {
+				msgYouTubeSearchFailed(serverProperties, searchArg);
+				return loadNextSong(serverProperties);
+			}
 		} else {
 			serverProperties.playing = serverProperties.playlistQueue[0];
 		}

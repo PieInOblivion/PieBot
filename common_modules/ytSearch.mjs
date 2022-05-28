@@ -16,7 +16,8 @@ export async function youtubeIDtoTitle(id) {
 }
 
 export async function youtubeSearchtoID(search) {
-	return (await youtube.searchVideos(search, 1))[0].id;
+	const result = await youtube.searchVideos(search, 1);
+	return result.length ? result[0].id : false;
 }
 
 export function isYoutubeLink(link) {

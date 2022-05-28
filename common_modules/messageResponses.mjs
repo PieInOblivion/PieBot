@@ -76,7 +76,7 @@ export function msgNowPlaying(serverProperties, title) {
         color: 0x00ffff,
         fields: [
             {name: title, value: `**https://www.youtube.com/watch?v=${serverProperties.playing}**`},
-            {name: `Repeat:`, value: (serverProperties.repeat ? 'Yes' : 'No'), inline: true}
+            {name: `Repeat:`, value: (serverProperties.repeat ? 'On' : 'Off'), inline: true}
         ]
     });
 }
@@ -204,7 +204,7 @@ export function msgRepeatChange(serverProperties) {
     sendMessageObject(serverProperties, {
         color: 0x00ffff,
         fields: [
-            {name: `Repeat:`, value: (serverProperties.repeat ? 'Yes' : 'No')}
+            {name: `Repeat:`, value: (serverProperties.repeat ? 'On' : 'Off')}
         ]
     });
 }
@@ -262,10 +262,20 @@ export function msgPlayQueueEmpty(serverProperties) {
     });
 }
 
-//import {  } from '../common_modules/messageResponses.mjs';
-//import {  } from './messageResponses.mjs';
+//play.mjs, loadNextSong.mjs
+export function msgYouTubeSearchFailed(serverProperties, search) {
+    sendMessageObject(serverProperties, {
+        title: `Search failed: ${search}`,
+        color: 0xff0000
+    });
+}
+
+/*
+import {  } from '../common_modules/messageResponses.mjs';
+import {  } from './messageResponses.mjs';
 export function msg(serverProperties) {
     sendMessageObject(serverProperties, {
 
     });
 }
+*/

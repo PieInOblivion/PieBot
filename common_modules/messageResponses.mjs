@@ -242,7 +242,7 @@ export function msgSkipFailed(serverProperties) {
     sendMessageObject(serverProperties, {
         color: 0xff9900,
         fields:[
-            {name: `Nice.`, value: `Only one song in queue or not currently playing`}
+            {name: `Nice.`, value: `There are no songs in either queues or not currently playing`}
         ]
     });
 }

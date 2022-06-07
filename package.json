@@ -22,7 +22,7 @@
     "got": "^12.0.4",
     "node-osu": "^2.2.1",
     "simple-youtube-api": "^5.2.1",
-    "sodium": "^3.0.2",
+    "sodium-native": "^3.3.0",
     "spotify-web-api-node": "^5.0.2",
     "twisted": "^1.46.8",
     "utf-8-validate": "^5.0.9",

@@ -6,7 +6,7 @@ import {
 	createAudioPlayer,
 	createAudioResource,
 	AudioPlayerStatus,
-	StreamType,
+	StreamType
 } from '@discordjs/voice';
 import { loadNextSong } from './loadNextSong.mjs';
 import { resetProperties } from './resetServerProperties.mjs';

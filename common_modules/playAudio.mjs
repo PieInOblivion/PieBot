@@ -1,35 +1,23 @@
-//import { msgPlayFailed, msgPlayQueueEmpty } from './messageResponses.mjs';
-import { msgPlayQueueEmpty } from './messageResponses.mjs';
+import { msgPlayFailed, msgPlayQueueEmpty } from './messageResponses.mjs';
 import {
 	entersState,
 	joinVoiceChannel,
 	createAudioPlayer,
 	createAudioResource,
-	AudioPlayerStatus,
-	StreamType
+	AudioPlayerStatus
 } from '@discordjs/voice';
 import { loadNextSong } from './loadNextSong.mjs';
 import { resetProperties } from './resetServerProperties.mjs';
-import ytdl from 'ytdl-core';
-//import { stream } from 'play-dl';
+import { stream } from 'play-dl';
 
 export async function playAudio(serverProperties) {
-	/*
+	
 	const source = await stream(serverProperties.playing).catch(err => {
 		msgPlayFailed(serverProperties);
 		console.log("enterState:", err);
 		console.log("serverProperties:", serverProperties);
 		songEnded(serverProperties);
 	});
-	*/
-
-	const source = await ytdl(serverProperties.playing, {
-		filter: 'audioonly',
-		quality: 'highestaudio',
-		dlChunkSize: 0,
-		highWaterMark: 1<<22
-	});
-
 
 	if (source) {
 		if (!serverProperties.voiceConnection) {
@@ -40,7 +28,7 @@ export async function playAudio(serverProperties) {
 			});
 		}
 
-		const resource = createAudioResource(source, { inputType: StreamType.Arbitrary });
+		const resource = createAudioResource(source.stream, { inputType: source.type });
 
 		const player = createAudioPlayer();
 

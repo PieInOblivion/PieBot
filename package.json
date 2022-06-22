@@ -19,7 +19,7 @@
     "cheerio": "^1.0.0-rc.11",
     "discord.js": "^13.7.0",
     "erlpack": "github:discord/erlpack",
-    "got": "^12.0.4",
+    "got": "^12.1.0",
     "node-osu": "^2.2.1",
     "play-dl": "^1.9.5",
     "simple-youtube-api": "^5.2.1",

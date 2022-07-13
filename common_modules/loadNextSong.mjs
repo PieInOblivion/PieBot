@@ -17,6 +17,7 @@ export async function loadNextSong(serverProperties) {
 			serverProperties.playing = await youtubeSearchtoID(searchArg);
 			if (!serverProperties.playing) {
 				msgYouTubeSearchFailed(serverProperties, searchArg);
+				serverProperties.playlistQueue.shift();
 				return loadNextSong(serverProperties);
 			}
 		} else {

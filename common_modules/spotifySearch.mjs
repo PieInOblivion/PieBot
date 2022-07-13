@@ -79,7 +79,7 @@ async function playlistIDtoArray(id) {
 		const group = await spotify.getPlaylistTracks(id, { offset: config.spotifyApiLimit * i, fields: 'items' });
 
 		group.body.items.forEach((item) => {
-			ret.push(`${item.track.artists.map((artist) => artist.name).join(` `)} - ${item.track.name}`);
+			ret.push(`${item.track.artists.map((artist) => artist.name).join(` `)} ${item.track.name}`);
 		});
 	}
 

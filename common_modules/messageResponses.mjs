@@ -1,7 +1,8 @@
-import { MessageEmbed } from 'discord.js';
+// import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 function sendMessageObject(serverProperties, msgObject) {
-    serverProperties.lastMessage.channel.send({ embeds: [new MessageEmbed(msgObject)] });
+    serverProperties.lastMessage.channel.send({ embeds: [new EmbedBuilder(msgObject)] });
 }
 
 function sendMessageEmbeds(serverProperties, embedsArray) {
@@ -63,9 +64,9 @@ export function msgLolLoadingGameData(serverProperties) {
 
 export function msgLolPlayerSummary(serverProperties, headerEmbed, blueEmbed, RedEmbed) {
     sendMessageEmbeds(serverProperties, [
-        new MessageEmbed(headerEmbed),
-        new MessageEmbed(blueEmbed),
-        new MessageEmbed(RedEmbed)
+        new EmbedBuilder(headerEmbed),
+        new EmbedBuilder(blueEmbed),
+        new EmbedBuilder(RedEmbed)
     ]);
 }
 

@@ -1,7 +1,7 @@
 import { readdirSync } from 'fs';
 
 // Discrete Bot Modules
-import { Client, Intents } from 'discord.js';
+import { Client, GatewayIntentBits } from 'discord.js';
 import { log } from './common_modules/log.mjs';
 import { resetProperties } from './common_modules/resetServerProperties.mjs';
 
@@ -23,7 +23,14 @@ readdirSync('./bot_modules').forEach(moduleName => {
 	});
 });
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent
+	]
+});
 const serverPropertiesTable = {};
 
 channelsJSON.forEach(serverInfo => {

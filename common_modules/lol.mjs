@@ -1,4 +1,4 @@
-import cheerio from 'cheerio';
+import { load } from 'cheerio';
 import { LolApi } from 'twisted';
 import { getJSON, getHTML } from './https.mjs';
 import keysJSON from '../secret/keys.json' assert {type: "json"};
@@ -36,11 +36,16 @@ export async function playerLastMatches(id) {
 
 export async function playerRankedStats(name) {
 	const response = await getHTML(encodeURI(`https://${config.opggRegion}.op.gg/summoner/userName=${name}`));
-	const $ = cheerio.load(response.body);
-	const rank = $('[class=TierRank]').text();
-	const wins = $('[class=wins]').text().replace('W', '');
-	const losses = $('[class=losses]').text().replace('L', '');
-	const winRatio = $('[class=winratio]').text().replace('Win Ratio ', '');
+	const $ = load(response.body);
+	const rankText = $('[class=tier]').text();
+	const rank = rankText[0].toUpperCase() + rankText.slice(1)
+
+	const winloss = $('[class=win-lose]').text().split(' ')
+	const wins = winloss[0].slice(0, -1);
+	const losses = winloss[1].slice(0, -2);
+
+	const winRatio = $('[class=ratio]:first').text().replace('Win Rate ', '');
+
 	return { r: rank, w: wins, l: losses, wr: winRatio };
 }
 
